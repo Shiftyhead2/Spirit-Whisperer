@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5782a871c0c285d499b8f0945ed85957, type: 3}
-  m_Name: 02-Response2
+  m_Script: {fileID: 11500000, guid: 9b8b7cc80b691164dbb9713485efd319, type: 3}
+  m_Name: Brown
   m_EditorClassIdentifier: 
-  ResponseText: My name is [NAME]
+  NameText: Brown

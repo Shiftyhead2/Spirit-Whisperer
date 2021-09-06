@@ -8,5 +8,7 @@ public class Questions : ScriptableObject
     [TextArea(0, 100)]
     public string QuestionText;
 
+    public int Reveals;
+
     public List<Responses> responses = new List<Responses>();
 }

@@ -14,6 +14,9 @@ public class GhostBehaviour : MonoBehaviour
     [SerializeField] float failureChance; 
     [SerializeField] GhostPatience currentPatience;
 
+    bool isPresent = false;
+    bool fullNameRevealed = false;
+
 
     void OnEnable()
     {
@@ -29,6 +32,7 @@ public class GhostBehaviour : MonoBehaviour
     void Start()
     {
         SetUpPatience();
+        SetUpInformationPanelUI();
     }
 
     void SetUpPatience()
@@ -48,10 +52,12 @@ public class GhostBehaviour : MonoBehaviour
     }
 
 
-    void Respond()
+    void Respond(int whichReveal)
     {
+        
         if (isResponseSuccessfull())
         {
+            RevealInformation(whichReveal);
             GameActions.onResponseSucceded?.Invoke();
         }
         else 
@@ -70,5 +76,47 @@ public class GhostBehaviour : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    void RevealInformation(int which)
+    {
+        switch (which)
+        {
+            case 0:
+                CheckIsPresentTrue();
+                break;
+            case 1:
+                fullNameRevealed = true;
+                CheckIsPresentTrue();
+                break;
+        }
+        SetUpInformationPanelUI();
+
+    }
+
+    void CheckIsPresentTrue()
+    {
+        if (!isPresent)
+        {
+            isPresent = true;
+        }
+        else
+        {
+            return;
+        }
+    }
+
+    void SetUpInformationPanelUI()
+    {
+        if (!fullNameRevealed)
+        {
+            InformationPanelUI.instance.SetUpFullName("??? ???");
+        }
+        else
+        {
+            InformationPanelUI.instance.SetUpFullName(GhostData.Instance.FullName);
+        }
+
+        InformationPanelUI.instance.SetUpPresenceToggle(isPresent);
     }
 }

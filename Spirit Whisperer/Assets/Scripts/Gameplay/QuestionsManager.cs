@@ -9,12 +9,14 @@ public class QuestionsManager : MonoBehaviour
 
     int numberOfQuestions = 2;
 
-    int minWaitingTimeForAResponse = 5;
-    int maxWaitingTimeForAResponse = 11;
+    [SerializeField]int minWaitingTimeForAResponse = 3;
+    [SerializeField]int maxWaitingTimeForAResponse = 10;
 
 
     Responses currentResponse;
 
+
+    int whichReveal;
 
     void OnEnable()
     {
@@ -67,6 +69,8 @@ public class QuestionsManager : MonoBehaviour
             UImanager._instance.SetUpQuestionButton(newQuestion.QuestionText, i);
         }
         UImanager._instance.SetUpResponseText("");
+        currentResponse = null;
+        whichReveal = 0;
     }
 
 
@@ -82,9 +86,10 @@ public class QuestionsManager : MonoBehaviour
         UImanager._instance.HideOrEnableButtons(true);
         //Caching the current response because the entire line of code is too long 
         currentResponse = currentQuestions[which].responses[Random.Range(0, currentQuestions[which].responses.Count)];
+        whichReveal = currentQuestions[which].Reveals;
         Debug.Log("Waiting for a response");
         yield return new WaitForSeconds(Random.Range(minWaitingTimeForAResponse, maxWaitingTimeForAResponse));
-        GameActions.onAwaitResponse?.Invoke();
+        GameActions.onAwaitResponse?.Invoke(currentQuestions[which].Reveals);
     }
 
     //TODO: later down the line this function will enable removal of all the questions whos type has already been answered too
@@ -113,7 +118,7 @@ public class QuestionsManager : MonoBehaviour
 
     IEnumerator ResponseSuccess()
     {
-        UImanager._instance.SetUpResponseText(currentResponse.ResponseText);
+        UImanager._instance.SetUpResponseText(getFullResponse(true));
         yield return new WaitForSeconds(5f);
         AddCurrentQuestions();
         UImanager._instance.HideOrEnableButtons(false);
@@ -122,10 +127,27 @@ public class QuestionsManager : MonoBehaviour
 
     IEnumerator ResponseFailure()
     {
-        UImanager._instance.SetUpResponseText("No response");
+        UImanager._instance.SetUpResponseText(getFullResponse(false));
         yield return new WaitForSeconds(2f);
         UImanager._instance.HideOrEnableButtons(false);
         UImanager._instance.SetUpResponseText("");
+    }
+
+    string getFullResponse(bool isSuccessful)
+    {
+        if (isSuccessful)
+        {
+            switch (whichReveal)
+            {
+                case 0:
+                    return currentResponse.ResponseText;
+                case 1:
+                    return currentResponse.ResponseText + GhostData.Instance.FullName;
+            }
+        }
+
+        return "No response";
+        
     }
     
 }
