@@ -16,6 +16,9 @@ public class GhostBehaviour : MonoBehaviour
 
     bool isPresent = false;
     bool fullNameRevealed = false;
+    bool ageRevealed = false;
+    bool dateOfBirthRevealed = false;
+    bool dateOfDeathRevealed = false;
 
 
     void OnEnable()
@@ -70,7 +73,7 @@ public class GhostBehaviour : MonoBehaviour
     private bool isResponseSuccessfull()
     {
         float currentChange = Random.Range(0f, 1f);
-        Debug.Log(currentChange);
+        //Debug.Log(currentChange);
         if(currentChange >= failureChance)
         {
             return true;
@@ -87,6 +90,10 @@ public class GhostBehaviour : MonoBehaviour
                 break;
             case 1:
                 fullNameRevealed = true;
+                CheckIsPresentTrue();
+                break;
+            case 2:
+                ageRevealed = true;
                 CheckIsPresentTrue();
                 break;
         }
@@ -110,11 +117,38 @@ public class GhostBehaviour : MonoBehaviour
     {
         if (!fullNameRevealed)
         {
-            InformationPanelUI.instance.SetUpFullName("??? ???");
+            InformationPanelUI.instance.SetUpFullName("???");
         }
         else
         {
             InformationPanelUI.instance.SetUpFullName(GhostData.Instance.FullName);
+        }
+
+        if(!ageRevealed)
+        {
+            InformationPanelUI.instance.SetUpAge("???");
+        }
+        else
+        {
+            InformationPanelUI.instance.SetUpAge(GhostData.Instance.Age);
+        }
+
+        if (!dateOfBirthRevealed)
+        {
+            InformationPanelUI.instance.SetUpBirth("???");
+        }
+        else
+        {
+            InformationPanelUI.instance.SetUpBirth(GhostData.Instance.DateOfBirth);
+        }
+
+        if (!dateOfDeathRevealed)
+        {
+            InformationPanelUI.instance.SetUpDeath("???");
+        }
+        else
+        {
+            InformationPanelUI.instance.SetUpDeath(GhostData.Instance.DateOfDeath);
         }
 
         InformationPanelUI.instance.SetUpPresenceToggle(isPresent);

@@ -10,6 +10,9 @@ public class InformationPanelUI : MonoBehaviour
 
     [SerializeField] Toggle PresenceToggler;
     [SerializeField] TextMeshProUGUI NameText;
+    [SerializeField] TextMeshProUGUI AgeText;
+    [SerializeField] TextMeshProUGUI DateOfBirthText;
+    [SerializeField] TextMeshProUGUI DateOfDeathText;
 
 
     void Awake()
@@ -34,12 +37,53 @@ public class InformationPanelUI : MonoBehaviour
 
     public void SetUpFullName(string name)
     {
+        if(NameText.text == GhostData.Instance.FullName)
+        {
+            return;
+        }
+
         NameText.text = "Name:" + name;
     }
 
     public void SetUpPresenceToggle(bool toggled)
     {
+        if (PresenceToggler.isOn)
+        {
+            return;
+        }
+
         PresenceToggler.isOn = toggled;
-    } 
+    }
+    
+
+    public void SetUpAge(string age)
+    {
+        if(AgeText.text == GhostData.Instance.Age)
+        {
+            return;
+        }
+
+        AgeText.text = "Age:" + age;
+    }
+
+    public void SetUpBirth(string birth)
+    {
+        if(DateOfBirthText.text == GhostData.Instance.DateOfBirth)
+        {
+            return;
+        }
+
+        DateOfBirthText.text = "Date of birth:" + birth;
+    }
+
+    public void SetUpDeath(string death)
+    {
+        if(DateOfDeathText.text == GhostData.Instance.DateOfDeath)
+        {
+            return;
+        }
+
+        DateOfDeathText.text = "Date of death:" + death;
+    }
 
 }

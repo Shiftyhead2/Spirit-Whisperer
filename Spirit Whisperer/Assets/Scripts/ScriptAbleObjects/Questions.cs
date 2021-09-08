@@ -11,4 +11,5 @@ public class Questions : ScriptableObject
     public int Reveals;
 
     public List<Responses> responses = new List<Responses>();
+    public List<Responses> starterResponses = new List<Responses>();
 }

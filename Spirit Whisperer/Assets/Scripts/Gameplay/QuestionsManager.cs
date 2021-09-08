@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class QuestionsManager : MonoBehaviour
 {
-    [SerializeField] private List<Questions> allQuestions = new List<Questions>();
-    [SerializeField] private List<Questions> currentQuestions = new List<Questions>();
+    [SerializeField] private List<Questions> allQuestions = new List<Questions>(); //all the possible questions
+    [SerializeField] private List<Questions> currentQuestions = new List<Questions>(); // the selected two questions to ask
+
 
     int numberOfQuestions = 2;
 
@@ -14,6 +15,7 @@ public class QuestionsManager : MonoBehaviour
 
 
     Responses currentResponse;
+    Responses starterResponse;
 
 
     int whichReveal;
@@ -32,14 +34,15 @@ public class QuestionsManager : MonoBehaviour
         GameActions.onResponseFailed -= OnResponseFailed;
     }
 
+
     void Awake()
     {
         PopulateQuestions();
-        
     }
 
     void Start()
     {
+        
         GetTwoQuestions();
     }
 
@@ -51,13 +54,16 @@ public class QuestionsManager : MonoBehaviour
         {
             allQuestions.Add(q);
         }
+        
     }
 
     void GetTwoQuestions()
     {
-        if(currentQuestions.Count > 0)
+        if(allQuestions.Count == 0)
         {
-            currentQuestions.Clear();
+            Debug.LogError("We currently have no questions to ask");
+            UImanager._instance.HideOrEnableButtons(true);
+            return;
         }
 
 
@@ -68,9 +74,12 @@ public class QuestionsManager : MonoBehaviour
             allQuestions.Remove(newQuestion);
             UImanager._instance.SetUpQuestionButton(newQuestion.QuestionText, i);
         }
+
         UImanager._instance.SetUpResponseText("");
         currentResponse = null;
+        starterResponse = null;
         whichReveal = 0;
+        UImanager._instance.HideOrEnableButtons(false);
     }
 
 
@@ -86,20 +95,57 @@ public class QuestionsManager : MonoBehaviour
         UImanager._instance.HideOrEnableButtons(true);
         //Caching the current response because the entire line of code is too long 
         currentResponse = currentQuestions[which].responses[Random.Range(0, currentQuestions[which].responses.Count)];
+        if(currentQuestions[which].starterResponses.Count > 0)
+        {
+            starterResponse = currentQuestions[which].starterResponses[Random.Range(0, currentQuestions[which].starterResponses.Count)];
+        }
         whichReveal = currentQuestions[which].Reveals;
-        Debug.Log("Waiting for a response");
+        AddCurrentQuestions();
+        //Debug.Log("Waiting for a response");
         yield return new WaitForSeconds(Random.Range(minWaitingTimeForAResponse, maxWaitingTimeForAResponse));
-        GameActions.onAwaitResponse?.Invoke(currentQuestions[which].Reveals);
+        GameActions.onAwaitResponse?.Invoke(whichReveal);
     }
 
-    //TODO: later down the line this function will enable removal of all the questions whos type has already been answered too
+    //TODO: Figure out a way to make sure the presence questions also get removed from the list if presence was revealed with a another question
 
+    /* Loops throught all the questions in the current questions pool(questions that were selected for the player to ask) and re-adds them
+     * to the pool of all questions and then clears the current question pool. This is so all the questions that were already answered can be removed.
+     */
     void AddCurrentQuestions()
     {
         foreach(Questions question in currentQuestions)
         {
             allQuestions.Add(question);
         }
+
+        if (currentQuestions.Count > 0)
+        {
+            //Debug.Log("The list is higher than 0 therefore we need to remove these questions from the list");
+            currentQuestions.Clear();
+
+        }
+    }
+
+
+    /*Creates a new list of questions and then checks that list of questions to remove the already answered questions from the 
+     * pool of all questions. There probably is a better way of doing this ,but what it works so I don't really care.
+     */
+    void RemoveAlreadyAskedQuestions()
+    {
+        List<Questions> q = new List<Questions>();
+        foreach(Questions question in allQuestions)
+        {
+            q.Add(question);
+        }
+
+        foreach(Questions _q in q)
+        {
+            if(_q.Reveals == whichReveal)
+            {
+                allQuestions.Remove(_q);
+            }
+        }
+        GetTwoQuestions();
     }
 
     void OnResponseSuccess()
@@ -120,9 +166,7 @@ public class QuestionsManager : MonoBehaviour
     {
         UImanager._instance.SetUpResponseText(getFullResponse(true));
         yield return new WaitForSeconds(5f);
-        AddCurrentQuestions();
-        UImanager._instance.HideOrEnableButtons(false);
-        GetTwoQuestions();
+        RemoveAlreadyAskedQuestions();
     }
 
     IEnumerator ResponseFailure()
@@ -131,8 +175,11 @@ public class QuestionsManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
         UImanager._instance.HideOrEnableButtons(false);
         UImanager._instance.SetUpResponseText("");
+        GetTwoQuestions();
     }
 
+
+    //This current way of making dynamic responses is dumb. I need to find a better way to do this ,but currently it works so it's whatever
     string getFullResponse(bool isSuccessful)
     {
         if (isSuccessful)
@@ -140,9 +187,33 @@ public class QuestionsManager : MonoBehaviour
             switch (whichReveal)
             {
                 case 0:
-                    return currentResponse.ResponseText;
+                    if(starterResponse == null)
+                    {
+                        return currentResponse.ResponseText;
+                    }
+                    else
+                    {
+                        return "";
+                    }
+                    
                 case 1:
-                    return currentResponse.ResponseText + GhostData.Instance.FullName;
+                    if(starterResponse == null)
+                    {
+                        return currentResponse.ResponseText + GhostData.Instance.FullName;
+                    }
+                    else
+                    {
+                        return "";
+                    }
+                case 2:
+                    if (starterResponse == null)
+                    {
+                        return GhostData.Instance.Age + currentResponse.ResponseText;
+                    }
+                    else
+                    {
+                        return starterResponse.ResponseText + GhostData.Instance.Age + currentResponse.ResponseText;
+                    }
             }
         }
 

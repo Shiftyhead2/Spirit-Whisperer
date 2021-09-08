@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 777a32c0b3b4b5445a7479b05d12a0a7, type: 3}
+  m_Name: 03-HowYoungAreYou
+  m_EditorClassIdentifier: 
+  QuestionText: How young are you?
+  Reveals: 2
+  responses:
+  - {fileID: 11400000, guid: a29c18abf0d37c64db3101890e80d482, type: 2}
+  starterResponses:
+  - {fileID: 11400000, guid: 8a5911d225e00634596e7b47aded2786, type: 2}
+  - {fileID: 11400000, guid: f6f69a040a1c61742bfdc458f7983feb, type: 2}
+  - {fileID: 11400000, guid: 038195e78bac84e4e8d79ee779a29ecc, type: 2}
