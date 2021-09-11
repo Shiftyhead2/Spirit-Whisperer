@@ -42,8 +42,8 @@ public class QuestionsManager : MonoBehaviour
 
     void Start()
     {
-        
-        GetTwoQuestions();
+
+        StartGame();
     }
 
 
@@ -55,6 +55,34 @@ public class QuestionsManager : MonoBehaviour
             allQuestions.Add(q);
         }
         
+    }
+
+    void StartGame()
+    {
+
+        var startQuestions = new List<Questions>();
+        foreach(Questions question in allQuestions)
+        {
+            if(question.Reveals == 0)
+            {
+                startQuestions.Add(question);
+            }
+            
+        }
+
+        for (int i = 0;  i < numberOfQuestions; i++)
+        {
+            Questions newQuestion = startQuestions[Random.Range(0, startQuestions.Count)];
+            currentQuestions.Add(newQuestion);
+            allQuestions.Remove(newQuestion);
+            UImanager._instance.SetUpQuestionButton(newQuestion.QuestionText, i);
+        }
+
+        UImanager._instance.SetUpResponseText("");
+        currentResponse = null;
+        starterResponse = null;
+        whichReveal = 0;
+        startQuestions.Clear();
     }
 
     void GetTwoQuestions()
@@ -106,7 +134,7 @@ public class QuestionsManager : MonoBehaviour
         GameActions.onAwaitResponse?.Invoke(whichReveal);
     }
 
-    //TODO: Figure out a way to make sure the presence questions also get removed from the list if presence was revealed with a another question
+    //TODO: Figure out a way to make sure the presence questions also get removed from the list if presence was revealed with a another question(same with age)
 
     /* Loops throught all the questions in the current questions pool(questions that were selected for the player to ask) and re-adds them
      * to the pool of all questions and then clears the current question pool. This is so all the questions that were already answered can be removed.
@@ -147,6 +175,8 @@ public class QuestionsManager : MonoBehaviour
         }
         GetTwoQuestions();
     }
+
+
 
     void OnResponseSuccess()
     {
@@ -213,6 +243,24 @@ public class QuestionsManager : MonoBehaviour
                     else
                     {
                         return starterResponse.ResponseText + GhostData.Instance.Age + currentResponse.ResponseText;
+                    }
+                case 3:
+                    if (starterResponse == null)
+                    {
+                        return currentResponse.ResponseText + GhostData.Instance.DateOfBirth;
+                    }
+                    else
+                    {
+                        return "";
+                    }
+                case 4:
+                    if (starterResponse == null)
+                    {
+                        return currentResponse.ResponseText + GhostData.Instance.DateOfDeath;
+                    }
+                    else
+                    {
+                        return "";
                     }
             }
         }

@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum GhostPatience
-{
-    CALM, //More likely to respond, less likely to attack, extremely unlikely to get angrier on a sucessfull response(75% chance to respond)
-    IMPATIENT, //Somewhat likely to respond,more likely to attack, unlikely to get angrier on a sucessfull response(50% chance to respond)
-    ANGRY //Extremely unlikely to respond,extremely likely to attack , already at the max patience level and it cannot get angrier(25% chance to respond)
+{    
+    NONE, //Extremely likely to respond(90% chance to respond)
+    CALM, //More likely to respond, less likely to attack, extremely unlikely to get angrier on a sucessfull response(65% chance to respond, 15% to get angry on a successful response)
+    IMPATIENT, //Somewhat likely to respond,more likely to attack, unlikely to get angrier on a sucessfull response(50% chance to respond, 25% to get angry on a sucessful response)
+    ANGRY //Extremely unlikely to respond,extremely likely to attack , already at the max patience level and it cannot get angrier(30% chance to respond)
 }
 
 public class GhostBehaviour : MonoBehaviour
 {
-    [SerializeField] float failureChance; 
+    [SerializeField] float failureChance;
+    [SerializeField] float AngerOnFailedResponse;
+    [SerializeField] float AngerOnSucessfullResponse;
     [SerializeField] GhostPatience currentPatience;
 
     bool isPresent = false;
@@ -34,6 +37,7 @@ public class GhostBehaviour : MonoBehaviour
 
     void Start()
     {
+        currentPatience = GhostPatience.NONE;
         SetUpPatience();
         SetUpInformationPanelUI();
     }
@@ -42,14 +46,25 @@ public class GhostBehaviour : MonoBehaviour
     {
         switch (currentPatience)
         {
+            case GhostPatience.NONE:
+                failureChance = 0.10f;
+                AngerOnFailedResponse = 0f;
+                AngerOnSucessfullResponse = 0f;
+                break;
             case GhostPatience.CALM:
-                failureChance = 0.25f;
+                failureChance = 0.35f;
+                AngerOnSucessfullResponse = 0.10f;
+                AngerOnFailedResponse = 0.50f;
                 break;
             case GhostPatience.IMPATIENT:
                 failureChance = 0.5f;
+                AngerOnSucessfullResponse = 0.15f;
+                AngerOnFailedResponse = 0.50f;
                 break;
             case GhostPatience.ANGRY:
                 failureChance = 0.75f;
+                AngerOnSucessfullResponse = 0f;
+                AngerOnFailedResponse = 0f;
                 break;
         }
     }
@@ -62,19 +77,62 @@ public class GhostBehaviour : MonoBehaviour
         {
             RevealInformation(whichReveal);
             GameActions.onResponseSucceded?.Invoke();
+            GetAngrier(AngerOnSucessfullResponse);
         }
         else 
         {
-
+            GetAngrier(AngerOnFailedResponse);
             GameActions.onResponseFailed?.Invoke();
         }
     }
 
+
+    void GetAngrier(float chance)
+    {
+        if (CanGetAngry(chance))
+        {
+            Debug.Log("The ghost is angrier");
+            switch (currentPatience)
+            {
+                case GhostPatience.NONE:
+                    currentPatience = GhostPatience.CALM;
+                    break;
+                case GhostPatience.CALM:
+                    currentPatience = GhostPatience.IMPATIENT;
+                    break;
+                case GhostPatience.IMPATIENT:
+                    currentPatience = GhostPatience.ANGRY;
+                    break;
+            }
+            SetUpPatience();
+        }
+        else
+        {
+            return;
+        }
+    }
+
+
+    private bool CanGetAngry(float failureChance)
+    {
+        if(currentPatience == GhostPatience.NONE)
+        {
+            return true;
+        }
+        float currentChance = Random.Range(0f, 1f);
+        Debug.Log(currentChance);
+        if(currentChance <= failureChance && currentPatience != GhostPatience.ANGRY && isPresent)
+        {
+            return true;
+        }
+        return false;
+    }
+
     private bool isResponseSuccessfull()
     {
-        float currentChange = Random.Range(0f, 1f);
+        float currentChance = Random.Range(0f, 1f);
         //Debug.Log(currentChange);
-        if(currentChange >= failureChance)
+        if(currentChance >= failureChance)
         {
             return true;
         }
@@ -86,32 +144,25 @@ public class GhostBehaviour : MonoBehaviour
         switch (which)
         {
             case 0:
-                CheckIsPresentTrue();
+                isPresent = true;
                 break;
             case 1:
                 fullNameRevealed = true;
-                CheckIsPresentTrue();
                 break;
             case 2:
                 ageRevealed = true;
-                CheckIsPresentTrue();
+                break;
+            case 3:
+                dateOfBirthRevealed = true;
+                break;
+            case 4:
+                dateOfDeathRevealed = true;
                 break;
         }
         SetUpInformationPanelUI();
 
     }
 
-    void CheckIsPresentTrue()
-    {
-        if (!isPresent)
-        {
-            isPresent = true;
-        }
-        else
-        {
-            return;
-        }
-    }
 
     void SetUpInformationPanelUI()
     {

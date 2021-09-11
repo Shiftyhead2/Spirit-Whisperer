@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 777a32c0b3b4b5445a7479b05d12a0a7, type: 3}
+  m_Name: 04-WhenIsYourBirthday
+  m_EditorClassIdentifier: 
+  QuestionText: When is your birthday?
+  Reveals: 3
+  responses:
+  - {fileID: 11400000, guid: 75690809aedb15040b47c89d6f048865, type: 2}
+  - {fileID: 11400000, guid: de5aa8d513b4a8748bf6680f1f014284, type: 2}
+  - {fileID: 11400000, guid: 81be8030e9e22b84b9e82aad9e76be45, type: 2}
+  - {fileID: 11400000, guid: 2221debda4b42914cadfb2c592ee7c5c, type: 2}
+  starterResponses: []

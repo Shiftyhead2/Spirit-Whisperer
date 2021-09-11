@@ -62,8 +62,8 @@ public class GhostData : MonoBehaviour
 
     void SetUpBirthAndDeath()
     {
-        var BirthDay = Random.Range(0, 32);
-        var DeathDay = Random.Range(0, 32);
+        var BirthDay = Random.Range(1, 32);
+        var DeathDay = Random.Range(1, 32);
         var BirthMonth = Random.Range(1, 13);
         var DeathMonth = Random.Range(1, 13);
         var BirthYear = Random.Range(0, 2000);

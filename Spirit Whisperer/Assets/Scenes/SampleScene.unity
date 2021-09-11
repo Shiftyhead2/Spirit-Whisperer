@@ -1654,7 +1654,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   failureChance: 0
-  currentPatience: 0
+  currentPatience: 1
 --- !u!4 &1265315402
 Transform:
   m_ObjectHideFlags: 0
