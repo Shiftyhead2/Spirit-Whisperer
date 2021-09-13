@@ -121,8 +121,13 @@ public class QuestionsManager : MonoBehaviour
     IEnumerator WaitForResponse(int which)
     {
         UImanager._instance.HideOrEnableButtons(true);
+        GameActions.onDisableToggleButton?.Invoke(false);
         //Caching the current response because the entire line of code is too long 
-        currentResponse = currentQuestions[which].responses[Random.Range(0, currentQuestions[which].responses.Count)];
+        if (currentQuestions[which].responses.Count > 0)
+        {
+            currentResponse = currentQuestions[which].responses[Random.Range(0, currentQuestions[which].responses.Count)];
+        }
+        
         if(currentQuestions[which].starterResponses.Count > 0)
         {
             starterResponse = currentQuestions[which].starterResponses[Random.Range(0, currentQuestions[which].starterResponses.Count)];
@@ -132,6 +137,7 @@ public class QuestionsManager : MonoBehaviour
         //Debug.Log("Waiting for a response");
         yield return new WaitForSeconds(Random.Range(minWaitingTimeForAResponse, maxWaitingTimeForAResponse));
         GameActions.onAwaitResponse?.Invoke(whichReveal);
+        
     }
 
     //TODO: Figure out a way to make sure the presence questions also get removed from the list if presence was revealed with a another question(same with age)
@@ -197,6 +203,7 @@ public class QuestionsManager : MonoBehaviour
         UImanager._instance.SetUpResponseText(getFullResponse(true));
         yield return new WaitForSeconds(5f);
         RemoveAlreadyAskedQuestions();
+        GameActions.onDisableToggleButton?.Invoke(true);
     }
 
     IEnumerator ResponseFailure()
@@ -205,6 +212,7 @@ public class QuestionsManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
         UImanager._instance.HideOrEnableButtons(false);
         UImanager._instance.SetUpResponseText("");
+        GameActions.onDisableToggleButton?.Invoke(true);
         GetTwoQuestions();
     }
 
@@ -217,7 +225,7 @@ public class QuestionsManager : MonoBehaviour
             switch (whichReveal)
             {
                 case 0:
-                    if(starterResponse == null)
+                    if(starterResponse == null && currentResponse != null)
                     {
                         return currentResponse.ResponseText;
                     }
@@ -227,7 +235,7 @@ public class QuestionsManager : MonoBehaviour
                     }
                     
                 case 1:
-                    if(starterResponse == null)
+                    if(starterResponse == null && currentResponse != null)
                     {
                         return currentResponse.ResponseText + GhostData.Instance.FullName;
                     }
@@ -238,14 +246,18 @@ public class QuestionsManager : MonoBehaviour
                 case 2:
                     if (starterResponse == null)
                     {
-                        return GhostData.Instance.Age + currentResponse.ResponseText;
+                        if(currentResponse != null)
+                        {
+                            return GhostData.Instance.Age + currentResponse.ResponseText;
+                        }
+                        return "";
                     }
                     else
                     {
                         return starterResponse.ResponseText + GhostData.Instance.Age + currentResponse.ResponseText;
                     }
                 case 3:
-                    if (starterResponse == null)
+                    if (starterResponse == null && currentResponse != null)
                     {
                         return currentResponse.ResponseText + GhostData.Instance.DateOfBirth;
                     }
@@ -254,9 +266,27 @@ public class QuestionsManager : MonoBehaviour
                         return "";
                     }
                 case 4:
-                    if (starterResponse == null)
+                    if (starterResponse == null && currentResponse != null)
                     {
                         return currentResponse.ResponseText + GhostData.Instance.DateOfDeath;
+                    }
+                    else
+                    {
+                        return "";
+                    }
+                case 5:
+                    if(starterResponse == null && currentResponse != null)
+                    {
+                        return currentResponse.ResponseText + GhostData.Instance.Gender;
+                    }
+                    else
+                    {
+                        return "";
+                    }
+                case 6:
+                    if(starterResponse == null && currentResponse == null)
+                    {
+                        return GhostData.Instance.CauseOfDeath;
                     }
                     else
                     {

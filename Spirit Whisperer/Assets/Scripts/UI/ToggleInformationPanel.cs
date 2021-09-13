@@ -1,12 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ToggleInformationPanel : MonoBehaviour
 {
     public GameObject InformationPanel;
     public GameObject ResponsePanel;
     public GameObject QuestionsPanel;
+
+    public Button InformationPanelButton;
+
+    void OnEnable()
+    {
+        GameActions.onDisableToggleButton += ToggleInformationPanelButton;
+    }
+
+    void OnDisable()
+    {
+        GameActions.onDisableToggleButton -= ToggleInformationPanelButton;
+    }
 
     public void Toggle()
     {
@@ -24,4 +37,11 @@ public class ToggleInformationPanel : MonoBehaviour
         }
         
     }
+
+    void ToggleInformationPanelButton(bool enabled)
+    {
+        InformationPanelButton.interactable = enabled;
+    }
+
+    
 }

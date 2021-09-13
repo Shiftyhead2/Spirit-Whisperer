@@ -13,6 +13,8 @@ public class InformationPanelUI : MonoBehaviour
     [SerializeField] TextMeshProUGUI AgeText;
     [SerializeField] TextMeshProUGUI DateOfBirthText;
     [SerializeField] TextMeshProUGUI DateOfDeathText;
+    [SerializeField] TextMeshProUGUI GenderText;
+    [SerializeField] TextMeshProUGUI CauseOfDeathText;
 
 
     void Awake()
@@ -84,6 +86,27 @@ public class InformationPanelUI : MonoBehaviour
         }
 
         DateOfDeathText.text = "Date of death:" + death;
+    }
+
+
+    public void SetUpGender(string gender)
+    {
+        if(GenderText.text == GhostData.Instance.Gender)
+        {
+            return;
+        }
+
+        GenderText.text = "Gender:" + gender;
+    }
+
+    public void SetUpCauseOfDeath(string deathCause)
+    {
+        if(CauseOfDeathText.text == GhostData.Instance.CauseOfDeath)
+        {
+            return;
+        }
+
+        CauseOfDeathText.text = "Cause Of Death:" + deathCause;
     }
 
 }

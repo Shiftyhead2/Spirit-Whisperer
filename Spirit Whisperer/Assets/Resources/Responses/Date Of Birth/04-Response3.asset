@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5782a871c0c285d499b8f0945ed85957, type: 3}
   m_Name: 04-Response3
   m_EditorClassIdentifier: 
-  ResponseText: I came to this world on
+  ResponseText: 'I came to this world on '

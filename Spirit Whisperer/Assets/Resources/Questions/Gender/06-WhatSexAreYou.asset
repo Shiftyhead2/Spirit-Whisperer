@@ -9,7 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5782a871c0c285d499b8f0945ed85957, type: 3}
-  m_Name: 05-Response 2
+  m_Script: {fileID: 11500000, guid: 777a32c0b3b4b5445a7479b05d12a0a7, type: 3}
+  m_Name: 06-WhatSexAreYou
   m_EditorClassIdentifier: 
-  ResponseText: 'My death was on '
+  QuestionText: What sex are you?
+  Reveals: 5
+  responses:
+  - {fileID: 11400000, guid: ea208a265e88a1c4190579ee3b5f76ea, type: 2}
+  starterResponses: []

@@ -22,6 +22,8 @@ public class GhostBehaviour : MonoBehaviour
     bool ageRevealed = false;
     bool dateOfBirthRevealed = false;
     bool dateOfDeathRevealed = false;
+    bool genderRevealed = false;
+    bool causeOfDeathRevealed = false;
 
 
     void OnEnable()
@@ -120,7 +122,7 @@ public class GhostBehaviour : MonoBehaviour
             return true;
         }
         float currentChance = Random.Range(0f, 1f);
-        Debug.Log(currentChance);
+        //Debug.Log(currentChance);
         if(currentChance <= failureChance && currentPatience != GhostPatience.ANGRY && isPresent)
         {
             return true;
@@ -157,6 +159,12 @@ public class GhostBehaviour : MonoBehaviour
                 break;
             case 4:
                 dateOfDeathRevealed = true;
+                break;
+            case 5:
+                genderRevealed = true;
+                break;
+            case 6:
+                causeOfDeathRevealed = true;
                 break;
         }
         SetUpInformationPanelUI();
@@ -200,6 +208,24 @@ public class GhostBehaviour : MonoBehaviour
         else
         {
             InformationPanelUI.instance.SetUpDeath(GhostData.Instance.DateOfDeath);
+        }
+
+        if (!genderRevealed)
+        {
+            InformationPanelUI.instance.SetUpGender("???");
+        }
+        else
+        {
+            InformationPanelUI.instance.SetUpGender(GhostData.Instance.Gender);
+        }
+
+        if (!causeOfDeathRevealed)
+        {
+            InformationPanelUI.instance.SetUpCauseOfDeath("???");
+        }
+        else
+        {
+            InformationPanelUI.instance.SetUpCauseOfDeath(GhostData.Instance.CauseOfDeath);
         }
 
         InformationPanelUI.instance.SetUpPresenceToggle(isPresent);

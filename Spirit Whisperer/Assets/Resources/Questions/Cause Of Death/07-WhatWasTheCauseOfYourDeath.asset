@@ -9,7 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5782a871c0c285d499b8f0945ed85957, type: 3}
-  m_Name: 05-Response 2
+  m_Script: {fileID: 11500000, guid: 777a32c0b3b4b5445a7479b05d12a0a7, type: 3}
+  m_Name: 07-WhatWasTheCauseOfYourDeath
   m_EditorClassIdentifier: 
-  ResponseText: 'My death was on '
+  QuestionText: What was the cause of your death?
+  Reveals: 6
+  responses: []
+  starterResponses: []

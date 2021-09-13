@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Genders
+{
+    Male,
+    Female
+}
+
 public class GhostData : MonoBehaviour
 {
     /* Code for generating ghost data runs only once in the awake method. 
@@ -14,9 +20,13 @@ public class GhostData : MonoBehaviour
     public string DateOfBirth { get; private set; }
     public string DateOfDeath { get; private set; }
     public string Age { get; private set; }
+    public string Gender { get; private set; }
+    public string CauseOfDeath { get; private set; }
 
-    [SerializeField]private List<Names> FirstNames = new List<Names>();
-    [SerializeField]private List<Names> SurnNames = new List<Names>();
+    private List<Names> FirstNames = new List<Names>();
+    private List<Names> SurnNames = new List<Names>();
+    private List<DeathCauses> DeathCauses = new List<DeathCauses>();
+
 
     void Awake()
     {
@@ -30,10 +40,41 @@ public class GhostData : MonoBehaviour
         }
 
         GetNames();
+        GetDeathCauses();
         SetUpName();
         SetUpBirthAndDeath();
+        SetUpGender();
+        SetUpCauseOfDeath();
     }
 
+    void SetUpCauseOfDeath()
+    {
+        CauseOfDeath = DeathCauses[Random.Range(0, DeathCauses.Count)].DeathText;
+    }
+
+    void SetUpGender()
+    {
+        int random = Random.Range(0, 2);
+        switch (random)
+        {
+            case 0:
+                Gender = Genders.Male.ToString();
+                break;
+            case 1:
+                Gender = Genders.Female.ToString();
+                break;
+        }
+    }
+
+    void GetDeathCauses()
+    {
+        var _deathCauses = Resources.LoadAll<DeathCauses>("Death Causes");
+
+        foreach(var d in _deathCauses)
+        {
+            DeathCauses.Add(d);
+        }
+    }
 
     void GetNames()
     {
