@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 06-WhatSexAreYou
   m_EditorClassIdentifier: 
   QuestionText: What sex are you?
-  Reveals: 5
+  Reveals: 3
   responses:
   - {fileID: 11400000, guid: ea208a265e88a1c4190579ee3b5f76ea, type: 2}
   starterResponses: []

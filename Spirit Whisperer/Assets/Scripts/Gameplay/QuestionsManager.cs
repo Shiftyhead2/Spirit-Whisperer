@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class QuestionsManager : MonoBehaviour
 {
-    [SerializeField] private List<Questions> allQuestions = new List<Questions>(); //all the possible questions
-    [SerializeField] private List<Questions> currentQuestions = new List<Questions>(); // the selected two questions to ask
 
+    public static int currentOrder { get; private set; }
+
+
+    [SerializeField] List<Questions> allQuestions = new List<Questions>(); //all the possible questions
+    [SerializeField] List<Questions> currentQuestions = new List<Questions>(); // the selected two questions to ask
+
+    List<Questions> inOrderQuestions = new List<Questions>();
+    List<Questions> possibleQuestionsToAsk = new List<Questions>();
 
     int numberOfQuestions = 2;
 
@@ -19,12 +25,16 @@ public class QuestionsManager : MonoBehaviour
 
 
     int whichReveal;
+    int whichButtonIsRandom;
+    bool previousQuestionNotInOrder;
+    bool ResponseWasASuccess;
 
     void OnEnable()
     {
         GameActions.onButtonPress += StartResponseWait;
         GameActions.onResponseSucceded += OnResponseSuccess;
         GameActions.onResponseFailed += OnResponseFailed;
+        GameActions.onQuestionInOrder += onQuestionInOrder;
     }
 
     void OnDisable()
@@ -32,6 +42,7 @@ public class QuestionsManager : MonoBehaviour
         GameActions.onButtonPress -= StartResponseWait;
         GameActions.onResponseSucceded -= OnResponseSuccess;
         GameActions.onResponseFailed -= OnResponseFailed;
+        GameActions.onQuestionInOrder -= onQuestionInOrder;
     }
 
 
@@ -42,7 +53,8 @@ public class QuestionsManager : MonoBehaviour
 
     void Start()
     {
-
+        currentOrder = 0;
+        previousQuestionNotInOrder = false;
         StartGame();
     }
 
@@ -59,7 +71,6 @@ public class QuestionsManager : MonoBehaviour
 
     void StartGame()
     {
-
         var startQuestions = new List<Questions>();
         foreach(Questions question in allQuestions)
         {
@@ -73,8 +84,8 @@ public class QuestionsManager : MonoBehaviour
         for (int i = 0;  i < numberOfQuestions; i++)
         {
             Questions newQuestion = startQuestions[Random.Range(0, startQuestions.Count)];
-            currentQuestions.Add(newQuestion);
             allQuestions.Remove(newQuestion);
+            currentQuestions.Add(newQuestion);
             UImanager._instance.SetUpQuestionButton(newQuestion.QuestionText, i);
         }
 
@@ -94,13 +105,54 @@ public class QuestionsManager : MonoBehaviour
             return;
         }
 
+        if (!previousQuestionNotInOrder && ResponseWasASuccess)
+        {
+            currentOrder++;
+            Debug.Log("current order: " + currentOrder);
+        }
+        inOrderQuestions.Clear();
+        PopulatePossibleQuestionsPool();
+        Questions newQuestion;
+        Questions newInOrderQuestion;
+
+        foreach (Questions question in allQuestions)
+        {
+            if(question.Reveals == currentOrder)
+            {
+                inOrderQuestions.Add(question);
+                possibleQuestionsToAsk.Remove(question);
+            }
+        }
+
+        whichButtonIsRandom = Random.Range(0, 2);
+
 
         for (int i = 0; i < numberOfQuestions; i++)
         {
-            Questions newQuestion = allQuestions[Random.Range(0, allQuestions.Count)];
-            currentQuestions.Add(newQuestion);
-            allQuestions.Remove(newQuestion);
-            UImanager._instance.SetUpQuestionButton(newQuestion.QuestionText, i);
+            if(whichButtonIsRandom == i)
+            {
+                newInOrderQuestion = inOrderQuestions[Random.Range(0, inOrderQuestions.Count)];
+                allQuestions.Remove(newInOrderQuestion);
+                currentQuestions.Add(newInOrderQuestion);
+                UImanager._instance.SetUpQuestionButton(newInOrderQuestion.QuestionText, whichButtonIsRandom);
+            }
+            else
+            {
+                
+                if (possibleQuestionsToAsk.Count > 0)
+                {
+                    
+                   newQuestion = possibleQuestionsToAsk[Random.Range(0, possibleQuestionsToAsk.Count)];
+                }
+                else
+                {
+                    newQuestion = allQuestions[Random.Range(0, allQuestions.Count)];
+                }
+                
+                allQuestions.Remove(newQuestion);
+                currentQuestions.Add(newQuestion);
+                UImanager._instance.SetUpQuestionButton(newQuestion.QuestionText, i);
+            }
         }
 
         UImanager._instance.SetUpResponseText("");
@@ -140,7 +192,7 @@ public class QuestionsManager : MonoBehaviour
         
     }
 
-    //TODO: Figure out a way to make sure the presence questions also get removed from the list if presence was revealed with a another question(same with age)
+    
 
     /* Loops throught all the questions in the current questions pool(questions that were selected for the player to ask) and re-adds them
      * to the pool of all questions and then clears the current question pool. This is so all the questions that were already answered can be removed.
@@ -195,12 +247,12 @@ public class QuestionsManager : MonoBehaviour
     {
         StopAllCoroutines();
         StartCoroutine(ResponseFailure());
-       
     }
 
     IEnumerator ResponseSuccess()
     {
-        UImanager._instance.SetUpResponseText(getFullResponse(true));
+        ResponseWasASuccess = true;
+        UImanager._instance.SetUpResponseText(getFullResponse());
         yield return new WaitForSeconds(5f);
         RemoveAlreadyAskedQuestions();
         GameActions.onDisableToggleButton?.Invoke(true);
@@ -208,7 +260,8 @@ public class QuestionsManager : MonoBehaviour
 
     IEnumerator ResponseFailure()
     {
-        UImanager._instance.SetUpResponseText(getFullResponse(false));
+        ResponseWasASuccess = false;
+        UImanager._instance.SetUpResponseText(getFullResponse());
         yield return new WaitForSeconds(2f);
         UImanager._instance.HideOrEnableButtons(false);
         UImanager._instance.SetUpResponseText("");
@@ -218,9 +271,9 @@ public class QuestionsManager : MonoBehaviour
 
 
     //This current way of making dynamic responses is dumb. I need to find a better way to do this ,but currently it works so it's whatever
-    string getFullResponse(bool isSuccessful)
+    string getFullResponse()
     {
-        if (isSuccessful)
+        if (ResponseWasASuccess)
         {
             switch (whichReveal)
             {
@@ -259,7 +312,7 @@ public class QuestionsManager : MonoBehaviour
                 case 3:
                     if (starterResponse == null && currentResponse != null)
                     {
-                        return currentResponse.ResponseText + GhostData.Instance.DateOfBirth;
+                        return currentResponse.ResponseText + GhostData.Instance.Gender;
                     }
                     else
                     {
@@ -268,7 +321,7 @@ public class QuestionsManager : MonoBehaviour
                 case 4:
                     if (starterResponse == null && currentResponse != null)
                     {
-                        return currentResponse.ResponseText + GhostData.Instance.DateOfDeath;
+                        return currentResponse.ResponseText + GhostData.Instance.DateOfBirth;
                     }
                     else
                     {
@@ -277,7 +330,7 @@ public class QuestionsManager : MonoBehaviour
                 case 5:
                     if(starterResponse == null && currentResponse != null)
                     {
-                        return currentResponse.ResponseText + GhostData.Instance.Gender;
+                        return currentResponse.ResponseText + GhostData.Instance.DateOfDeath;
                     }
                     else
                     {
@@ -297,6 +350,20 @@ public class QuestionsManager : MonoBehaviour
 
         return "No response";
         
+    }
+
+    void onQuestionInOrder(bool inOrder)
+    {
+        previousQuestionNotInOrder = inOrder;
+    }
+
+    void PopulatePossibleQuestionsPool()
+    {
+        possibleQuestionsToAsk.Clear();
+        foreach(Questions q in allQuestions)
+        {
+            possibleQuestionsToAsk.Add(q);
+        }
     }
     
 }

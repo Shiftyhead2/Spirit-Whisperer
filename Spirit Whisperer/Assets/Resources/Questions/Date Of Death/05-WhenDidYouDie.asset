@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 05-WhenDidYouDie
   m_EditorClassIdentifier: 
   QuestionText: When did you die?
-  Reveals: 4
+  Reveals: 5
   responses:
   - {fileID: 11400000, guid: 75969866af3088a4184a27781c64a7e4, type: 2}
   - {fileID: 11400000, guid: e3983a4cdc91e824da781cfdaa9df593, type: 2}

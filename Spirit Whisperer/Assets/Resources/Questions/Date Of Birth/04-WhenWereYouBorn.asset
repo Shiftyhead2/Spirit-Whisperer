@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 04-WhenWereYouBorn
   m_EditorClassIdentifier: 
   QuestionText: When were you born?
-  Reveals: 3
+  Reveals: 4
   responses:
   - {fileID: 11400000, guid: 75690809aedb15040b47c89d6f048865, type: 2}
   - {fileID: 11400000, guid: de5aa8d513b4a8748bf6680f1f014284, type: 2}

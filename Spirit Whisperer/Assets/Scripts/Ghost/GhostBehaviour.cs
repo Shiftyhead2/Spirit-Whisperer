@@ -49,7 +49,7 @@ public class GhostBehaviour : MonoBehaviour
         switch (currentPatience)
         {
             case GhostPatience.NONE:
-                failureChance = 0.10f;
+                failureChance = 0f;
                 AngerOnFailedResponse = 0f;
                 AngerOnSucessfullResponse = 0f;
                 break;
@@ -74,6 +74,20 @@ public class GhostBehaviour : MonoBehaviour
 
     void Respond(int whichReveal)
     {
+        if(whichReveal != QuestionsManager.currentOrder)
+        {
+            Debug.Log("That question was not in order");
+            GameActions.onResponseFailed?.Invoke();
+            GameActions.onQuestionInOrder?.Invoke(true);
+            return;
+        }
+        else
+        {
+            Debug.Log("That question was in order");
+            GameActions.onQuestionInOrder?.Invoke(false);
+        }
+
+
         
         if (isResponseSuccessfull())
         {
@@ -155,13 +169,13 @@ public class GhostBehaviour : MonoBehaviour
                 ageRevealed = true;
                 break;
             case 3:
-                dateOfBirthRevealed = true;
+                genderRevealed = true;
                 break;
             case 4:
-                dateOfDeathRevealed = true;
+                dateOfBirthRevealed = true;
                 break;
             case 5:
-                genderRevealed = true;
+                dateOfDeathRevealed = true;
                 break;
             case 6:
                 causeOfDeathRevealed = true;

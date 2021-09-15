@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 06-AreYouABoy
   m_EditorClassIdentifier: 
   QuestionText: Are you a boy?
-  Reveals: 5
+  Reveals: 3
   responses:
   - {fileID: 11400000, guid: 42a4fc715ad1c784694f8328fad59bec, type: 2}
   starterResponses: []
