@@ -6,34 +6,76 @@ using UnityEngine.UI;
 public class ToggleInformationPanel : MonoBehaviour
 {
     public GameObject InformationPanel;
-    public GameObject ResponsePanel;
-    public GameObject QuestionsPanel;
+    public GameObject[] PanelsToEnable;
 
     public Button InformationPanelButton;
+
+    bool isInformationEnabled = false;
+    bool arePanelsEnabled = false;
 
     void OnEnable()
     {
         GameActions.onDisableToggleButton += ToggleInformationPanelButton;
+        GameActions.onToggleInformation += Toggle;
+        GameActions.onTogglePanels += TogglePanels;
     }
 
     void OnDisable()
     {
         GameActions.onDisableToggleButton -= ToggleInformationPanelButton;
+        GameActions.onToggleInformation -= Toggle;
+        GameActions.onTogglePanels -= TogglePanels;
+    }
+
+
+    private void Start()
+    {
+        for (int i = 0; i < PanelsToEnable.Length; i++)
+        {
+            PanelsToEnable[i].SetActive(arePanelsEnabled);
+        }
     }
 
     public void Toggle()
     {
+        if (InformationPanelButton.interactable == false)
+        {
+            return;
+        }
+
+        isInformationEnabled = !isInformationEnabled;
+        InformationPanel.SetActive(isInformationEnabled);
+
+
         if (InformationPanel.activeInHierarchy == false) 
         {
-            InformationPanel.SetActive(true);
-            ResponsePanel.SetActive(false);
-            QuestionsPanel.SetActive(false);
+            for (int i = 0; i < PanelsToEnable.Length; i++)
+            {
+                if (arePanelsEnabled)
+                {
+                    PanelsToEnable[i].SetActive(true);
+                }
+                else
+                {
+                    return;
+                }
+                
+            }
         }
         else
         {
-            InformationPanel.SetActive(false);
-            ResponsePanel.SetActive(true);
-            QuestionsPanel.SetActive(true);
+            for (int i = 0; i < PanelsToEnable.Length; i++)
+            {
+                if (arePanelsEnabled)
+                {
+                    PanelsToEnable[i].SetActive(false);
+                }
+                else
+                {
+                    return;
+                }
+                
+            }
         }
         
     }
@@ -41,6 +83,21 @@ public class ToggleInformationPanel : MonoBehaviour
     void ToggleInformationPanelButton(bool enabled)
     {
         InformationPanelButton.interactable = enabled;
+    }
+
+
+    void TogglePanels()
+    {
+        if (InformationPanel.activeInHierarchy || InformationPanelButton.interactable == false || QuestionsManager.WaitingForAResponse)
+        {
+            return;
+        }
+
+        arePanelsEnabled = !arePanelsEnabled;
+        for (int i = 0; i < PanelsToEnable.Length; i++)
+        {
+            PanelsToEnable[i].SetActive(arePanelsEnabled);
+        }
     }
 
     

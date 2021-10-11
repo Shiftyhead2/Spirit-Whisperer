@@ -33,6 +33,38 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""ToggleQuestions"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""23a647b1-a919-4536-9799-5696d9ec6e2a"",
+                    ""expectedControlType"": ""Key"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""ToggleInformation"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""416e565c-2221-444a-b614-4a7a1887a833"",
+                    ""expectedControlType"": ""Key"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""AskQuestion1"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""7464515f-e3a7-486d-982d-cad238833d1e"",
+                    ""expectedControlType"": ""Key"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""AskQuestion2"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""790a1ace-a40b-4be1-bbe2-3ae4df4e48aa"",
+                    ""expectedControlType"": ""Key"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
                 }
             ],
             ""bindings"": [
@@ -101,6 +133,50 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""View"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5667278e-d893-4fe5-9e62-6c2822275477"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleQuestions"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6141e716-db1c-40e4-8a40-d8e571d26c6f"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleInformation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c49aeeee-938e-4459-af7b-4457030476b4"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AskQuestion2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9afe3c89-4a7c-4cd4-9904-d154e8a6280c"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AskQuestion1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -111,6 +187,10 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_View = m_Player.FindAction("View", throwIfNotFound: true);
+        m_Player_ToggleQuestions = m_Player.FindAction("ToggleQuestions", throwIfNotFound: true);
+        m_Player_ToggleInformation = m_Player.FindAction("ToggleInformation", throwIfNotFound: true);
+        m_Player_AskQuestion1 = m_Player.FindAction("AskQuestion1", throwIfNotFound: true);
+        m_Player_AskQuestion2 = m_Player.FindAction("AskQuestion2", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -162,12 +242,20 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_Movement;
     private readonly InputAction m_Player_View;
+    private readonly InputAction m_Player_ToggleQuestions;
+    private readonly InputAction m_Player_ToggleInformation;
+    private readonly InputAction m_Player_AskQuestion1;
+    private readonly InputAction m_Player_AskQuestion2;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
         public PlayerActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
         public InputAction @View => m_Wrapper.m_Player_View;
+        public InputAction @ToggleQuestions => m_Wrapper.m_Player_ToggleQuestions;
+        public InputAction @ToggleInformation => m_Wrapper.m_Player_ToggleInformation;
+        public InputAction @AskQuestion1 => m_Wrapper.m_Player_AskQuestion1;
+        public InputAction @AskQuestion2 => m_Wrapper.m_Player_AskQuestion2;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -183,6 +271,18 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @View.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnView;
                 @View.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnView;
                 @View.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnView;
+                @ToggleQuestions.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleQuestions;
+                @ToggleQuestions.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleQuestions;
+                @ToggleQuestions.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleQuestions;
+                @ToggleInformation.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleInformation;
+                @ToggleInformation.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleInformation;
+                @ToggleInformation.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleInformation;
+                @AskQuestion1.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAskQuestion1;
+                @AskQuestion1.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAskQuestion1;
+                @AskQuestion1.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAskQuestion1;
+                @AskQuestion2.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAskQuestion2;
+                @AskQuestion2.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAskQuestion2;
+                @AskQuestion2.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAskQuestion2;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -193,6 +293,18 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @View.started += instance.OnView;
                 @View.performed += instance.OnView;
                 @View.canceled += instance.OnView;
+                @ToggleQuestions.started += instance.OnToggleQuestions;
+                @ToggleQuestions.performed += instance.OnToggleQuestions;
+                @ToggleQuestions.canceled += instance.OnToggleQuestions;
+                @ToggleInformation.started += instance.OnToggleInformation;
+                @ToggleInformation.performed += instance.OnToggleInformation;
+                @ToggleInformation.canceled += instance.OnToggleInformation;
+                @AskQuestion1.started += instance.OnAskQuestion1;
+                @AskQuestion1.performed += instance.OnAskQuestion1;
+                @AskQuestion1.canceled += instance.OnAskQuestion1;
+                @AskQuestion2.started += instance.OnAskQuestion2;
+                @AskQuestion2.performed += instance.OnAskQuestion2;
+                @AskQuestion2.canceled += instance.OnAskQuestion2;
             }
         }
     }
@@ -201,5 +313,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnView(InputAction.CallbackContext context);
+        void OnToggleQuestions(InputAction.CallbackContext context);
+        void OnToggleInformation(InputAction.CallbackContext context);
+        void OnAskQuestion1(InputAction.CallbackContext context);
+        void OnAskQuestion2(InputAction.CallbackContext context);
     }
 }

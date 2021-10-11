@@ -7,9 +7,26 @@ public class QuestionButton : MonoBehaviour
 
     [SerializeField] int whichButton;
 
-    public void PressButton()
+    private void OnEnable()
     {
-        GameActions.onButtonPress?.Invoke(whichButton);
+        GameActions.onQuestionAsked += PressButton;
+    }
+
+    private void OnDisable()
+    {
+        GameActions.onQuestionAsked -= PressButton;
+    }
+
+    public void PressButton(int which)
+    {
+        if (gameObject.activeInHierarchy && which == whichButton)
+        {
+            GameActions.onButtonPress?.Invoke(whichButton);
+        }
+        else
+        {
+            return;
+        }
     }
     
 }

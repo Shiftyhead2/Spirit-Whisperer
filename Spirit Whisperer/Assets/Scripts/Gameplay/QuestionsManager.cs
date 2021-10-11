@@ -6,6 +6,7 @@ public class QuestionsManager : MonoBehaviour
 {
 
     public static int currentOrder { get; private set; }
+    public static bool WaitingForAResponse { get; private set; }
 
 
     [SerializeField] List<Questions> allQuestions = new List<Questions>(); //all the possible questions
@@ -54,6 +55,7 @@ public class QuestionsManager : MonoBehaviour
     void Start()
     {
         currentOrder = 0;
+        WaitingForAResponse = false;
         previousQuestionNotInOrder = false;
         StartGame();
     }
@@ -167,6 +169,7 @@ public class QuestionsManager : MonoBehaviour
     {
         StopAllCoroutines();
         StartCoroutine(WaitForResponse(which));
+        WaitingForAResponse = true;
     }
 
 
@@ -256,6 +259,7 @@ public class QuestionsManager : MonoBehaviour
         yield return new WaitForSeconds(5f);
         RemoveAlreadyAskedQuestions();
         GameActions.onDisableToggleButton?.Invoke(true);
+        WaitingForAResponse = false;
     }
 
     IEnumerator ResponseFailure()
@@ -267,6 +271,7 @@ public class QuestionsManager : MonoBehaviour
         UImanager._instance.SetUpResponseText("");
         GameActions.onDisableToggleButton?.Invoke(true);
         GetTwoQuestions();
+        WaitingForAResponse = false;
     }
 
 

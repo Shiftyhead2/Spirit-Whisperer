@@ -35,6 +35,10 @@ public class FPSController : MonoBehaviour
 
         inputActions.Player.Movement.performed += ctx => input_Movement = ctx.ReadValue<Vector2>();
         inputActions.Player.View.performed += ctx => input_View = ctx.ReadValue<Vector2>();
+        inputActions.Player.ToggleInformation.performed += _ => GameActions.onToggleInformation?.Invoke();
+        inputActions.Player.ToggleQuestions.performed += _ => GameActions.onTogglePanels?.Invoke();
+        inputActions.Player.AskQuestion1.performed += _ => GameActions.onQuestionAsked?.Invoke(0);
+        inputActions.Player.AskQuestion2.performed += _ => GameActions.onQuestionAsked?.Invoke(1);
 
         inputActions.Enable();
 
@@ -42,6 +46,8 @@ public class FPSController : MonoBehaviour
         newCharacterRotation = transform.localRotation.eulerAngles;
 
         characterController = GetComponent<CharacterController>();
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     private void OnDisable()

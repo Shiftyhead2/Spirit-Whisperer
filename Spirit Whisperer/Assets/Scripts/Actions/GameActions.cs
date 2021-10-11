@@ -8,4 +8,7 @@ public class GameActions
     public static Action onResponseFailed;
     public static Action onResponseSucceded;
     public static Action<bool> onDisableToggleButton;
+    public static Action onToggleInformation;
+    public static Action onTogglePanels;
+    public static Action<int> onQuestionAsked;
 }

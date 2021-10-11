@@ -1070,8 +1070,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InformationPanel: {fileID: 980034216}
-  ResponsePanel: {fileID: 1983342841}
-  QuestionsPanel: {fileID: 937808957}
+  PanelsToEnable:
+  - {fileID: 1983342841}
+  - {fileID: 937808957}
   InformationPanelButton: {fileID: 115764675}
 --- !u!1 &883174023
 GameObject:
