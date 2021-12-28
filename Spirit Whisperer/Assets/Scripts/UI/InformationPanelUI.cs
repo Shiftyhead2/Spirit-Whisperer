@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/* Handles the information panel logic */
 public class InformationPanelUI : MonoBehaviour
 {
     public static InformationPanelUI instance { get; private set; }

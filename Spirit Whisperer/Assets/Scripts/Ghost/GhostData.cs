@@ -23,7 +23,8 @@ public class GhostData : MonoBehaviour
     public string Gender { get; private set; }
     public string CauseOfDeath { get; private set; }
 
-    private List<Names> FirstNames = new List<Names>();
+    private List<Names> MaleFirstNames = new List<Names>();
+    private List<Names> FemaleFirstNames = new List<Names>();
     private List<Names> SurnNames = new List<Names>();
     private List<DeathCauses> DeathCauses = new List<DeathCauses>();
 
@@ -41,9 +42,9 @@ public class GhostData : MonoBehaviour
 
         GetNames();
         GetDeathCauses();
+        SetUpGender();
         SetUpName();
         SetUpBirthAndDeath();
-        SetUpGender();
         SetUpCauseOfDeath();
     }
 
@@ -78,12 +79,18 @@ public class GhostData : MonoBehaviour
 
     void GetNames()
     {
-        var _firstnames = Resources.LoadAll<Names>("Names/First Names");
+        var _femalefirstnames = Resources.LoadAll<Names>("Names/First Names/Female");
+        var _malefirstnames = Resources.LoadAll<Names>("Names/First Names/Male");
         var _surnnames = Resources.LoadAll<Names>("Names/Surnames");
 
-        foreach(var n in _firstnames)
+        foreach(var n in _femalefirstnames)
         {
-            FirstNames.Add(n);
+            FemaleFirstNames.Add(n);
+        }
+
+        foreach(var n in _malefirstnames)
+        {
+            MaleFirstNames.Add(n);
         }
 
         foreach(var s in _surnnames)
@@ -95,8 +102,18 @@ public class GhostData : MonoBehaviour
 
     void SetUpName()
     {
-        var firstName = FirstNames[Random.Range(0, FirstNames.Count)].NameText;
+        var firstName = string.Empty;
         var surnName = SurnNames[Random.Range(0, SurnNames.Count)].NameText;
+
+        switch (Gender)
+        {
+            case "Male":
+                firstName = MaleFirstNames[Random.Range(0, MaleFirstNames.Count)].NameText;
+                break;
+            case "Female":
+                firstName = FemaleFirstNames[Random.Range(0, FemaleFirstNames.Count)].NameText;
+                break;
+        }
 
         FullName = firstName + " " + surnName;
     }

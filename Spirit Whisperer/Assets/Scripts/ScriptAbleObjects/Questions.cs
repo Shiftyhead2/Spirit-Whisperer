@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Question",menuName = "Questions/New Question", order  = 52)]
+[CreateAssetMenu(fileName = "New Question",menuName = "Gameplay/Player/Questions/New Question", order  = 52)]
 public class Questions : ScriptableObject
 {
     [TextArea(0, 100)]

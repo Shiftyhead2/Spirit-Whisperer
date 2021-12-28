@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/* Sets up the questions UI and the response UI */
+
 public class UImanager : MonoBehaviour
 {
 
