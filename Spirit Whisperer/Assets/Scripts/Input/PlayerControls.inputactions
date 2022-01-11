@@ -52,6 +52,14 @@
                     "expectedControlType": "Key",
                     "processors": "",
                     "interactions": "Press"
+                },
+                {
+                    "name": "ToggleFlashlight",
+                    "type": "PassThrough",
+                    "id": "c78ae3f6-e7cb-4229-977d-0545faee9c1c",
+                    "expectedControlType": "Key",
+                    "processors": "",
+                    "interactions": "Press"
                 }
             ],
             "bindings": [
@@ -162,6 +170,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "AskQuestion1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a775efb4-af37-4ef5-a037-20e4877eca5d",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleFlashlight",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -54,7 +54,7 @@ public class ToggleInformationPanel : MonoBehaviour
 
     private void Start()
     {
-        ResponsePanel.SetActive(arePanelsEnabled);
+        ToggleQuestionButtons(false);
     }
 
     public void Toggle()
@@ -81,11 +81,11 @@ public class ToggleInformationPanel : MonoBehaviour
     {
         if (isInformationEnabled)
         {
-            InformationRectTransform.DOAnchorPos(InformationPanelOpenPosition, 0.5f).OnStart(ShowInformationPanel);
+            InformationRectTransform.DOAnchorPos(InformationPanelOpenPosition, 0.5f);
         }
         else
         {
-            InformationRectTransform.DOAnchorPos(InformationPanelClosedPosition, 0.5f).OnComplete(ShowInformationPanel);
+            InformationRectTransform.DOAnchorPos(InformationPanelClosedPosition, 0.5f);
         }
     }
 
@@ -107,11 +107,11 @@ public class ToggleInformationPanel : MonoBehaviour
     {
         if (active)
         {
-            ResponseRectTransform.DOAnchorPos(ResponsePanelOpenPosition, 0.5f).OnStart(() => ToggleResponsePanels(active)).OnComplete(() => ToggleQuestionButtons(active));
+            ResponseRectTransform.DOAnchorPos(ResponsePanelOpenPosition, 0.5f).OnComplete(() => ToggleQuestionButtons(active));
         }
         else
         {
-            ResponseRectTransform.DOAnchorPos(ResponsePanelClosedPosition, 0.5f).OnStart(() => ToggleQuestionButtons(active)).OnComplete(() => ToggleResponsePanels(active));
+            ResponseRectTransform.DOAnchorPos(ResponsePanelClosedPosition, 0.5f).OnStart(() => ToggleQuestionButtons(active)).OnComplete(() => ToggleQuestionButtons(active));
         }
     }
 
@@ -123,16 +123,6 @@ public class ToggleInformationPanel : MonoBehaviour
         }
     }
 
-
-    void ToggleResponsePanels(bool active)
-    {
-        ResponsePanel.SetActive(active);
-    }
-
-    void ShowInformationPanel()
-    {
-        InformationPanel.SetActive(isInformationEnabled);
-    }
 
     void ShowInformationPanels()
     {

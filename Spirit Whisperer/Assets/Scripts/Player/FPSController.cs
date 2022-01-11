@@ -15,6 +15,7 @@ public class FPSController : MonoBehaviour
 
     [Header("References")]
     [SerializeField] Transform cameraHolder;
+    [SerializeField] Light flashLight;
 
     [Header("Settings")]
     public PlayerSettingsModel playerSettings;
@@ -35,10 +36,11 @@ public class FPSController : MonoBehaviour
 
         inputActions.Player.Movement.performed += ctx => input_Movement = ctx.ReadValue<Vector2>();
         inputActions.Player.View.performed += ctx => input_View = ctx.ReadValue<Vector2>();
-        inputActions.Player.ToggleInformation.performed += _ => GameActions.onToggleInformation?.Invoke();
-        inputActions.Player.ToggleQuestions.performed += _ => GameActions.onTogglePanels?.Invoke();
-        inputActions.Player.AskQuestion1.performed += _ => GameActions.onQuestionAsked?.Invoke(0);
-        inputActions.Player.AskQuestion2.performed += _ => GameActions.onQuestionAsked?.Invoke(1);
+        inputActions.Player.ToggleInformation.performed += ctx => GameActions.onToggleInformation?.Invoke();
+        inputActions.Player.ToggleQuestions.performed += ctx => GameActions.onTogglePanels?.Invoke();
+        inputActions.Player.AskQuestion1.performed += ctx => GameActions.onQuestionAsked?.Invoke(0);
+        inputActions.Player.AskQuestion2.performed += ctx => GameActions.onQuestionAsked?.Invoke(1);
+        inputActions.Player.ToggleFlashlight.performed += ctx => ToggleFlashlight();
 
         inputActions.Enable();
 
@@ -98,5 +100,10 @@ public class FPSController : MonoBehaviour
         newMovementSpeed.y += playerGravity;
 
         characterController.Move(newMovementSpeed);
+    }
+
+    void ToggleFlashlight()
+    {
+        flashLight.enabled = !flashLight.enabled;
     }
 }

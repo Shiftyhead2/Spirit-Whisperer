@@ -65,6 +65,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Key"",
                     ""processors"": """",
                     ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""ToggleFlashlight"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""c78ae3f6-e7cb-4229-977d-0545faee9c1c"",
+                    ""expectedControlType"": ""Key"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
                 }
             ],
             ""bindings"": [
@@ -177,6 +185,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""AskQuestion1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a775efb4-af37-4ef5-a037-20e4877eca5d"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleFlashlight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -191,6 +210,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Player_ToggleInformation = m_Player.FindAction("ToggleInformation", throwIfNotFound: true);
         m_Player_AskQuestion1 = m_Player.FindAction("AskQuestion1", throwIfNotFound: true);
         m_Player_AskQuestion2 = m_Player.FindAction("AskQuestion2", throwIfNotFound: true);
+        m_Player_ToggleFlashlight = m_Player.FindAction("ToggleFlashlight", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -246,6 +266,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_ToggleInformation;
     private readonly InputAction m_Player_AskQuestion1;
     private readonly InputAction m_Player_AskQuestion2;
+    private readonly InputAction m_Player_ToggleFlashlight;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -256,6 +277,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @ToggleInformation => m_Wrapper.m_Player_ToggleInformation;
         public InputAction @AskQuestion1 => m_Wrapper.m_Player_AskQuestion1;
         public InputAction @AskQuestion2 => m_Wrapper.m_Player_AskQuestion2;
+        public InputAction @ToggleFlashlight => m_Wrapper.m_Player_ToggleFlashlight;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -283,6 +305,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @AskQuestion2.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAskQuestion2;
                 @AskQuestion2.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAskQuestion2;
                 @AskQuestion2.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAskQuestion2;
+                @ToggleFlashlight.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleFlashlight;
+                @ToggleFlashlight.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleFlashlight;
+                @ToggleFlashlight.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleFlashlight;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -305,6 +330,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @AskQuestion2.started += instance.OnAskQuestion2;
                 @AskQuestion2.performed += instance.OnAskQuestion2;
                 @AskQuestion2.canceled += instance.OnAskQuestion2;
+                @ToggleFlashlight.started += instance.OnToggleFlashlight;
+                @ToggleFlashlight.performed += instance.OnToggleFlashlight;
+                @ToggleFlashlight.canceled += instance.OnToggleFlashlight;
             }
         }
     }
@@ -317,5 +345,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnToggleInformation(InputAction.CallbackContext context);
         void OnAskQuestion1(InputAction.CallbackContext context);
         void OnAskQuestion2(InputAction.CallbackContext context);
+        void OnToggleFlashlight(InputAction.CallbackContext context);
     }
 }

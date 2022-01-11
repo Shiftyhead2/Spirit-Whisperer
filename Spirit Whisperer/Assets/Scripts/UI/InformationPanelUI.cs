@@ -32,11 +32,6 @@ public class InformationPanelUI : MonoBehaviour
         
     }
 
-    void Start()
-    {
-        gameObject.SetActive(false);
-    }
-
 
     public void SetUpFullName(string name)
     {
@@ -45,7 +40,7 @@ public class InformationPanelUI : MonoBehaviour
             return;
         }
 
-        NameText.text = "Name:" + name;
+        NameText.text = $"Name:{name}";
     }
 
     public void SetUpPresenceToggle(bool toggled)
@@ -66,7 +61,7 @@ public class InformationPanelUI : MonoBehaviour
             return;
         }
 
-        AgeText.text = "Age:" + age;
+        AgeText.text = $"Age:{age}";
     }
 
     public void SetUpBirth(string birth)
@@ -76,7 +71,7 @@ public class InformationPanelUI : MonoBehaviour
             return;
         }
 
-        DateOfBirthText.text = "Date of birth:" + birth;
+        DateOfBirthText.text = $"Date of birth:{birth}";
     }
 
     public void SetUpDeath(string death)
@@ -86,7 +81,7 @@ public class InformationPanelUI : MonoBehaviour
             return;
         }
 
-        DateOfDeathText.text = "Date of death:" + death;
+        DateOfDeathText.text = $"Date of death:{death}";
     }
 
 
@@ -97,7 +92,7 @@ public class InformationPanelUI : MonoBehaviour
             return;
         }
 
-        GenderText.text = "Gender:" + gender;
+        GenderText.text = $"Gender:{gender}";
     }
 
     public void SetUpCauseOfDeath(string deathCause)
@@ -107,7 +102,7 @@ public class InformationPanelUI : MonoBehaviour
             return;
         }
 
-        CauseOfDeathText.text = "Cause Of Death:" + deathCause;
+        CauseOfDeathText.text = $"Cause of death:{deathCause}";
     }
 
 }

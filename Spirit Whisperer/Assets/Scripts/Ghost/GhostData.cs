@@ -115,7 +115,7 @@ public class GhostData : MonoBehaviour
                 break;
         }
 
-        FullName = firstName + " " + surnName;
+        FullName = $"{firstName} {surnName}";
     }
 
     void SetUpBirthAndDeath()
@@ -129,8 +129,8 @@ public class GhostData : MonoBehaviour
 
         var actualAge = DeathYear - BirthYear;
 
-        Age = actualAge.ToString();
-        DateOfBirth = BirthDay.ToString() + "." + BirthMonth.ToString() + "." + BirthYear.ToString();
-        DateOfDeath = DeathDay.ToString() + "." + DeathMonth.ToString() + "." + DeathYear.ToString();
+        Age = $"{actualAge.ToString()}";
+        DateOfBirth = $"{BirthDay.ToString()}.{BirthMonth.ToString()}.{BirthYear.ToString()}";
+        DateOfDeath = $"{DeathDay.ToString()}.{DeathMonth.ToString()}.{DeathYear.ToString()}";
     }
 }
