@@ -120,17 +120,39 @@ public class GhostData : MonoBehaviour
 
     void SetUpBirthAndDeath()
     {
-        var BirthDay = Random.Range(1, 32);
-        var DeathDay = Random.Range(1, 32);
         var BirthMonth = Random.Range(1, 13);
         var DeathMonth = Random.Range(1, 13);
+        var BirthDay = 0;
+        var DeathDay = 0;
+
+        if (BirthMonth == 2)
+        {
+            
+            BirthDay = Random.Range(1, 29);
+            
+        }
+        else 
+        {
+            BirthDay = Random.Range(1, 32); 
+        }
+
+        if(DeathMonth == 2)
+        {
+            DeathDay = Random.Range(1, 29);
+        }
+        else
+        {
+            DeathDay = Random.Range(1, 32);
+        }
+
+
         var BirthYear = Random.Range(0, 2000);
         var DeathYear = BirthYear + Random.Range(0, 101);
 
         var actualAge = DeathYear - BirthYear;
 
-        Age = $"{actualAge.ToString()}";
-        DateOfBirth = $"{BirthDay.ToString()}.{BirthMonth.ToString()}.{BirthYear.ToString()}";
-        DateOfDeath = $"{DeathDay.ToString()}.{DeathMonth.ToString()}.{DeathYear.ToString()}";
+        Age = $"{actualAge}";
+        DateOfBirth = $"{BirthDay}.{BirthMonth}.{BirthYear}";
+        DateOfDeath = $"{DeathDay}.{DeathMonth}.{DeathYear}";
     }
 }
