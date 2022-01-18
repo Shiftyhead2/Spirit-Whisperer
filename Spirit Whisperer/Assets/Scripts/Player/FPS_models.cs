@@ -5,6 +5,7 @@ using UnityEngine;
 
 public static class FPS_models
 {
+
     #region - Player
     [Serializable]
     public class PlayerSettingsModel
@@ -18,7 +19,6 @@ public static class FPS_models
         [Header("Movement Settings")]
         public float WalkingForwardSpeed;
         public float WalkingStrafeSpeed;
-        public float WalkingBackwardsSpeed;
     }
     #endregion
 }

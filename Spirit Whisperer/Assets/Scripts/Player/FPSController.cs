@@ -5,6 +5,9 @@ using static FPS_models;
 
 public class FPSController : MonoBehaviour
 {
+
+    private bool ShouldCrouch => canCrouch && !duringCrouchAnimation && characterController.isGrounded;
+
     private CharacterController characterController;
     private PlayerControls inputActions;
     [SerializeField] Vector2 input_Movement;
@@ -12,6 +15,9 @@ public class FPSController : MonoBehaviour
 
     private Vector3 newCameraRotation;
     private Vector3 newCharacterRotation;
+
+    [Header("Functional Options")]
+    [SerializeField] private bool canCrouch = true;
 
     [Header("References")]
     [SerializeField] Transform cameraHolder;
@@ -28,6 +34,19 @@ public class FPSController : MonoBehaviour
     [SerializeField] float gravityMin;
     [SerializeField] float playerGravity;
 
+    [Header("Crouch Parameters")]
+    [SerializeField] float crouchHeight = 0.5f;
+    [SerializeField] float standingHeight = 2f;
+    [SerializeField] float timeToCrouch = 0.25f;
+    [SerializeField] Vector3 crouchingCenter = new Vector3(0,0.5f,0);
+    [SerializeField] Vector3 standingCenter = new Vector3(0, 0, 0);
+    private bool isCrouching;
+    private bool duringCrouchAnimation;
+
+
+
+
+
 
     private void Awake()
     {
@@ -41,6 +60,7 @@ public class FPSController : MonoBehaviour
         inputActions.Player.AskQuestion1.performed += ctx => GameActions.onQuestionAsked?.Invoke(0);
         inputActions.Player.AskQuestion2.performed += ctx => GameActions.onQuestionAsked?.Invoke(1);
         inputActions.Player.ToggleFlashlight.performed += ctx => ToggleFlashlight();
+        inputActions.Player.Crouch.performed += ctx => HandleCrouch();
 
         inputActions.Enable();
 
@@ -61,6 +81,7 @@ public class FPSController : MonoBehaviour
     {
         CalculateMovement();
         CalculateView();
+        
     }
 
 
@@ -86,13 +107,13 @@ public class FPSController : MonoBehaviour
         var newMovementSpeed = new Vector3(horizontalSpeed, 0, verticalSpeed);
         newMovementSpeed = transform.TransformDirection(newMovementSpeed);
 
-        if(playerGravity > gravityMin)
+        if (playerGravity > gravityMin)
         {
             playerGravity -= gravityAmount * Time.deltaTime;
         }
-        
 
-        if(playerGravity < -0.1f && characterController.isGrounded)
+
+        if (playerGravity < -0.1f && characterController.isGrounded)
         {
             playerGravity = -0.1f;
         }
@@ -105,5 +126,38 @@ public class FPSController : MonoBehaviour
     void ToggleFlashlight()
     {
         flashLight.enabled = !flashLight.enabled;
+    }
+
+    void HandleCrouch()
+    {
+        if(ShouldCrouch)
+        {
+            StartCoroutine(CrouchStand());
+        }
+    }
+
+    private IEnumerator CrouchStand()
+    {
+        duringCrouchAnimation = true;
+        float timeElapsed = 0;
+        float targetHeight = isCrouching ? standingHeight : crouchHeight;
+        float currentHeight = characterController.height;
+        Vector3 targetCenter = isCrouching ? standingCenter : crouchingCenter;
+        Vector3 currentCenter = characterController.center;
+
+        while(timeElapsed < timeToCrouch)
+        {
+            characterController.height = Mathf.Lerp(currentHeight, targetHeight, timeElapsed / timeToCrouch);
+            characterController.center = Vector3.Lerp(currentCenter, targetCenter, timeElapsed / timeToCrouch);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        characterController.height = targetHeight;
+        characterController.center = targetCenter;
+
+        isCrouching = !isCrouching;
+
+        duringCrouchAnimation = false;
     }
 }
