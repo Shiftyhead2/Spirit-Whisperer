@@ -44,15 +44,20 @@ public class FPSController : MonoBehaviour
     private bool duringCrouchAnimation;
 
 
-
-
-
-
     private void Awake()
     {
         inputActions = new PlayerControls();
 
+        newCameraRotation = cameraHolder.localRotation.eulerAngles;
+        newCharacterRotation = transform.localRotation.eulerAngles;
 
+        characterController = GetComponent<CharacterController>();
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
+    private void OnEnable()
+    {
         inputActions.Player.Movement.performed += ctx => input_Movement = ctx.ReadValue<Vector2>();
         inputActions.Player.View.performed += ctx => input_View = ctx.ReadValue<Vector2>();
         inputActions.Player.ToggleInformation.performed += ctx => GameActions.onToggleInformation?.Invoke();
@@ -62,14 +67,8 @@ public class FPSController : MonoBehaviour
         inputActions.Player.ToggleFlashlight.performed += ctx => ToggleFlashlight();
         inputActions.Player.Crouch.performed += ctx => HandleCrouch();
 
+
         inputActions.Enable();
-
-        newCameraRotation = cameraHolder.localRotation.eulerAngles;
-        newCharacterRotation = transform.localRotation.eulerAngles;
-
-        characterController = GetComponent<CharacterController>();
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
 
     private void OnDisable()
@@ -81,7 +80,6 @@ public class FPSController : MonoBehaviour
     {
         CalculateMovement();
         CalculateView();
-        
     }
 
 

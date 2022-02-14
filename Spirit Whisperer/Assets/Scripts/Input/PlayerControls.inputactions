@@ -23,41 +23,41 @@
                 },
                 {
                     "name": "ToggleQuestions",
-                    "type": "PassThrough",
+                    "type": "Button",
                     "id": "23a647b1-a919-4536-9799-5696d9ec6e2a",
-                    "expectedControlType": "Key",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press"
                 },
                 {
                     "name": "ToggleInformation",
-                    "type": "PassThrough",
+                    "type": "Button",
                     "id": "416e565c-2221-444a-b614-4a7a1887a833",
-                    "expectedControlType": "Key",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press"
                 },
                 {
                     "name": "AskQuestion1",
-                    "type": "PassThrough",
+                    "type": "Button",
                     "id": "7464515f-e3a7-486d-982d-cad238833d1e",
-                    "expectedControlType": "Key",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press"
                 },
                 {
                     "name": "AskQuestion2",
-                    "type": "PassThrough",
+                    "type": "Button",
                     "id": "790a1ace-a40b-4be1-bbe2-3ae4df4e48aa",
-                    "expectedControlType": "Key",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press"
                 },
                 {
                     "name": "ToggleFlashlight",
-                    "type": "PassThrough",
+                    "type": "Button",
                     "id": "c78ae3f6-e7cb-4229-977d-0545faee9c1c",
-                    "expectedControlType": "Key",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press"
                 },
@@ -67,7 +67,7 @@
                     "id": "078268f2-e834-473f-bf4e-2df32ee66774",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Tap"
+                    "interactions": "Press"
                 }
             ],
             "bindings": [
