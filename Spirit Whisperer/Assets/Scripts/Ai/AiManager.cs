@@ -5,6 +5,9 @@ using UnityEngine.AI;
 
 public class AiManager : MonoBehaviour
 {
+
+    public bool IsWandering = false;
+
     [Header("Current state")]
     public IdleState startingState;
     private State currentState;
