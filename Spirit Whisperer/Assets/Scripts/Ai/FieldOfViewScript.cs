@@ -73,6 +73,5 @@ public class FieldOfViewScript : MonoBehaviour
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
-        Gizmos.color = Color.green;
     }
 }

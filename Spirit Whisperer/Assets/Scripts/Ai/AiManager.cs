@@ -5,9 +5,6 @@ using UnityEngine.AI;
 
 public class AiManager : MonoBehaviour
 {
-
-    public bool IsWandering = false;
-
     [Header("Current state")]
     public IdleState startingState;
     private State currentState;
@@ -22,23 +19,22 @@ public class AiManager : MonoBehaviour
     [Header("Rigidbody")]
     public Rigidbody AIrigidbody;
 
-    [Header("Locomotion")]
-    public float rotationSpeed = 5f;
-
-    [Header("Attack")]
-    public float minimumDistanceToAttack = 1f;
+    [Header("Stopping Distances")]
+    public float minimumAttackDistance = 2f;
+    public float minimumWanderStoppingDistance = 0.2f;
 
     private void Awake()
     {
         currentState = startingState;
-        AINavMeshAgent = GetComponentInChildren<NavMeshAgent>();
+        AINavMeshAgent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         AIrigidbody = GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
-        AINavMeshAgent.transform.localPosition = Vector3.zero;
+
+        animator.SetFloat("vertical", AINavMeshAgent.velocity.magnitude);
 
         if(currentTarget != null)
         {

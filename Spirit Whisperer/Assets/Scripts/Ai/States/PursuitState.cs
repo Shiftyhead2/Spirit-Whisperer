@@ -14,11 +14,10 @@ public class PursuitState : State
 
     public override State Tick(AiManager aiManager)
     {
-        Debug.Log("We are in the pursuit state");
+        //Debug.Log("We are in the pursuit state");
         MoveTowardsCurrentTarget(aiManager);
-        RotateTowardsCurrentTarget(aiManager);
 
-        if (aiManager.distanceFromCurrentTarget <= aiManager.minimumDistanceToAttack)
+        if (aiManager.distanceFromCurrentTarget <= aiManager.minimumAttackDistance)
         {
             return attackState;
         }
@@ -31,13 +30,8 @@ public class PursuitState : State
 
     private void MoveTowardsCurrentTarget(AiManager aiManager)
     {
-        aiManager.animator.SetFloat("vertical", 2, 0.2f, Time.deltaTime);
-    }
-
-    private void RotateTowardsCurrentTarget(AiManager aiManager)
-    {
         aiManager.AINavMeshAgent.enabled = true;
+        aiManager.AINavMeshAgent.isStopped = false;
         aiManager.AINavMeshAgent.SetDestination(aiManager.currentTarget.position);
-        aiManager.transform.rotation = Quaternion.Slerp(aiManager.transform.rotation, aiManager.AINavMeshAgent.transform.rotation,aiManager.rotationSpeed / Time.deltaTime);
     }
 }
