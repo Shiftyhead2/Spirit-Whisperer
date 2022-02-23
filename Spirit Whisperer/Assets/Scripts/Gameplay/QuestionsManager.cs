@@ -36,6 +36,7 @@ public class QuestionsManager : MonoBehaviour
         GameActions.onResponseSucceded += OnResponseSuccess;
         GameActions.onResponseFailed += OnResponseFailed;
         GameActions.onQuestionInOrder += onQuestionInOrder;
+        GameActions.onInsideRadiusOfGhost += CancelResponses;
     }
 
     void OnDisable()
@@ -44,6 +45,7 @@ public class QuestionsManager : MonoBehaviour
         GameActions.onResponseSucceded -= OnResponseSuccess;
         GameActions.onResponseFailed -= OnResponseFailed;
         GameActions.onQuestionInOrder -= onQuestionInOrder;
+        GameActions.onInsideRadiusOfGhost -= CancelResponses;
     }
 
 
@@ -368,6 +370,34 @@ public class QuestionsManager : MonoBehaviour
         foreach(Questions q in allQuestions)
         {
             possibleQuestionsToAsk.Add(q);
+        }
+    }
+
+
+    void CancelResponses(bool ghostInRange)
+    {
+
+        if (!WaitingForAResponse && ghostInRange)
+        {
+            //Debug.Log("Despite the ghost being in range, you're not waiting on a response. No need to check any futher");
+            return;
+        }
+
+
+
+        if(!ghostInRange && WaitingForAResponse)
+        {
+            //Debug.LogWarning("The ghost left the spirit box range while you were wating for a response. Canceling response");
+            StopAllCoroutines();
+            WaitingForAResponse = false;
+            UImanager._instance.HideOrEnableButtons(false);
+            UImanager._instance.SetUpResponseText("");
+            GameActions.onDisableToggleButton?.Invoke(true);
+            GetTwoQuestions();
+        }
+        else if(ghostInRange && WaitingForAResponse)
+        {
+            return;
         }
     }
     

@@ -18,7 +18,6 @@ public class ToggleInformationPanel : MonoBehaviour
 
     [Header("UI buttons")]
     public Button InformationPanelButton;
-    public Button[] questionButtons;
 
     bool isInformationEnabled = false;
     bool arePanelsEnabled = false;
@@ -52,10 +51,6 @@ public class ToggleInformationPanel : MonoBehaviour
     }
 
 
-    private void Start()
-    {
-        ToggleQuestionButtons(false);
-    }
 
     public void Toggle()
     {
@@ -107,21 +102,15 @@ public class ToggleInformationPanel : MonoBehaviour
     {
         if (active)
         {
-            ResponseRectTransform.DOAnchorPos(ResponsePanelOpenPosition, 0.5f).OnComplete(() => ToggleQuestionButtons(active));
+            ResponseRectTransform.DOAnchorPos(ResponsePanelOpenPosition, 0.5f).OnComplete(() => GameActions.onShowButtons?.Invoke());
         }
         else
         {
-            ResponseRectTransform.DOAnchorPos(ResponsePanelClosedPosition, 0.5f).OnStart(() => ToggleQuestionButtons(active)).OnComplete(() => ToggleQuestionButtons(active));
+            ResponseRectTransform.DOAnchorPos(ResponsePanelClosedPosition, 0.5f).OnStart(() => GameActions.onShowButtons?.Invoke());
         }
     }
 
-    void ToggleQuestionButtons(bool active)
-    {
-        for (int i = 0; i < questionButtons.Length; i++)
-        {
-            questionButtons[i].gameObject.SetActive(active);
-        }
-    }
+    
 
 
     void ShowInformationPanels()

@@ -11,4 +11,6 @@ public class GameActions
     public static Action onToggleInformation;
     public static Action onTogglePanels;
     public static Action<int> onQuestionAsked;
+    public static Action<bool> onInsideRadiusOfGhost;
+    public static Action onShowButtons;
 }
