@@ -21,20 +21,33 @@ public class IdleState : State
     }
 
 
+    private void OnEnable()
+    {
+        GameActions.onHuntStart += ResetFlags;
+        GameActions.onHuntEnd += ResetFlags;
+    }
+
+    private void OnDisable()
+    {
+        GameActions.onHuntStart -= ResetFlags;
+        GameActions.onHuntEnd -= ResetFlags;
+    }
+
+
     public override State Tick(AiManager aiManager)
     {
         FOV.FindATargetViaLineOfSight();
         if (aiManager.currentTarget != null)
         {
             //Debug.Log("We have found a target");
-            currentWanderTime = 0f;
+            ResetFlags();
             return pursueTargetState;
         }
         else
         {
             if(currentWanderTime >= wanderTime)
             {
-                currentWanderTime = 0f;
+                ResetFlags();
                 return wanderState;
             }
             else
@@ -45,5 +58,11 @@ public class IdleState : State
 
             return this;
         }
-    }    
+    } 
+    
+
+    void ResetFlags()
+    {
+        currentWanderTime = 0f;
+    }
 }

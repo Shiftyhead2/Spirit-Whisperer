@@ -22,6 +22,8 @@ public class QuestionButton : MonoBehaviour
         GameActions.onQuestionAsked += PressButton;
         GameActions.onInsideRadiusOfGhost += ToggleButton;
         GameActions.onShowButtons += ToggleShown;
+        GameActions.onHuntStart += OnHuntStart;
+        GameActions.onHuntEnd += OnHuntEnd;
     }
 
     private void OnDisable()
@@ -29,6 +31,8 @@ public class QuestionButton : MonoBehaviour
         GameActions.onQuestionAsked -= PressButton;
         GameActions.onInsideRadiusOfGhost -= ToggleButton;
         GameActions.onShowButtons -= ToggleShown;
+        GameActions.onHuntStart -= OnHuntStart;
+        GameActions.onHuntEnd -= OnHuntEnd;
     }
 
     public void PressButton(int which)
@@ -41,6 +45,17 @@ public class QuestionButton : MonoBehaviour
         {
             return;
         }
+    }
+
+    private void OnHuntStart()
+    {
+        ToggleButton(false);
+    }
+
+
+    private void OnHuntEnd()
+    {
+        ToggleButton(true);
     }
 
 

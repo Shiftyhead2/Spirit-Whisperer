@@ -13,4 +13,6 @@ public class GameActions
     public static Action<int> onQuestionAsked;
     public static Action<bool> onInsideRadiusOfGhost;
     public static Action onShowButtons;
+    public static Action onHuntStart;
+    public static Action onHuntEnd;
 }

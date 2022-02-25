@@ -41,6 +41,7 @@ public class ToggleInformationPanel : MonoBehaviour
         GameActions.onDisableToggleButton += ToggleInformationPanelButton;
         GameActions.onToggleInformation += Toggle;
         GameActions.onTogglePanels += TogglePanels;
+        GameActions.onHuntStart += HidePanels;
     }
 
     void OnDisable()
@@ -48,6 +49,7 @@ public class ToggleInformationPanel : MonoBehaviour
         GameActions.onDisableToggleButton -= ToggleInformationPanelButton;
         GameActions.onToggleInformation -= Toggle;
         GameActions.onTogglePanels -= TogglePanels;
+        GameActions.onHuntStart -= HidePanels;
     }
 
 
@@ -88,7 +90,7 @@ public class ToggleInformationPanel : MonoBehaviour
     void TogglePanels()
     {
        
-        if (isInformationEnabled || InformationPanelButton.interactable == false || QuestionsManager.WaitingForAResponse)
+        if (isInformationEnabled || InformationPanelButton.interactable == false || QuestionsManager.WaitingForAResponse || GameManager.isHuntActivated)
         {
             return;
         }
@@ -126,6 +128,16 @@ public class ToggleInformationPanel : MonoBehaviour
             {
                 return;
             }
+        }
+    }
+
+
+    void HidePanels()
+    {
+        if (arePanelsEnabled)
+        {
+            arePanelsEnabled = false;
+            TweenResponsePanels(false);
         }
     }
 
