@@ -36,7 +36,8 @@ public class QuestionsManager : MonoBehaviour
         GameActions.onResponseSucceded += OnResponseSuccess;
         GameActions.onResponseFailed += OnResponseFailed;
         GameActions.onQuestionInOrder += onQuestionInOrder;
-        GameActions.onInsideRadiusOfGhost += CancelResponses;
+        GameActions.onInsideRadiusOfGhost += CancelResponseIfGhostIsNotInRange;
+        GameActions.onHuntStart += CancelResponseOnHunt;
     }
 
     void OnDisable()
@@ -45,7 +46,8 @@ public class QuestionsManager : MonoBehaviour
         GameActions.onResponseSucceded -= OnResponseSuccess;
         GameActions.onResponseFailed -= OnResponseFailed;
         GameActions.onQuestionInOrder -= onQuestionInOrder;
-        GameActions.onInsideRadiusOfGhost -= CancelResponses;
+        GameActions.onInsideRadiusOfGhost -= CancelResponseIfGhostIsNotInRange;
+        GameActions.onHuntStart -= CancelResponseOnHunt;
     }
 
 
@@ -374,7 +376,7 @@ public class QuestionsManager : MonoBehaviour
     }
 
 
-    void CancelResponses(bool ghostInRange)
+    void CancelResponseIfGhostIsNotInRange(bool ghostInRange)
     {
 
         if (!WaitingForAResponse && ghostInRange)
@@ -399,6 +401,25 @@ public class QuestionsManager : MonoBehaviour
         {
             return;
         }
+    }
+
+
+    void CancelResponseOnHunt()
+    {
+        if (!WaitingForAResponse)
+        {
+            return;
+        }
+
+
+        Debug.Log("A hunt has started");
+
+        StopAllCoroutines();
+        WaitingForAResponse = false;
+        UImanager._instance.HideOrEnableButtons(false);
+        UImanager._instance.SetUpResponseText("");
+        GameActions.onDisableToggleButton?.Invoke(true);
+        GetTwoQuestions();
     }
     
 }

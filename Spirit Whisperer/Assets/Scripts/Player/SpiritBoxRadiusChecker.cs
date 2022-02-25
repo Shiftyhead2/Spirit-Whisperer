@@ -6,7 +6,6 @@ public class SpiritBoxRadiusChecker : MonoBehaviour
 {
     [SerializeField] private float radius;
     [SerializeField] private LayerMask ghostLayerMask;
-    [SerializeField] private float checkInterval;
     [SerializeField] private float repeatInterval;
     bool ghostInRange = false;
 
@@ -14,7 +13,42 @@ public class SpiritBoxRadiusChecker : MonoBehaviour
     private void Start()
     {
         ghostInRange = false;
-        InvokeRepeating(nameof(IsGhostInRadius),checkInterval,repeatInterval);
+        InvokeMethod();
+    }
+
+
+    void OnEnable()
+    {
+        GameActions.onHuntStart += OnHuntStart;
+        GameActions.onHuntEnd += OnHuntEnd;
+    }
+
+    void OnDisable()
+    {
+        GameActions.onHuntStart -= OnHuntStart;
+        GameActions.onHuntEnd -= OnHuntEnd;
+    }
+
+
+    void InvokeMethod()
+    {
+        InvokeRepeating(nameof(IsGhostInRadius), 0f, repeatInterval);
+    }
+
+
+    void OnHuntStart()
+    {
+        CancelInvoke();
+        if (ghostInRange)
+        {
+            ghostInRange = false;
+        }
+    }
+
+
+    void OnHuntEnd()
+    {
+        InvokeMethod();
     }
 
 

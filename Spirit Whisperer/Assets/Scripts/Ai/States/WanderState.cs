@@ -28,6 +28,19 @@ public class WanderState : State
     }
 
 
+    private void OnEnable()
+    {
+        GameActions.onHuntStart += ResetFlags;
+        GameActions.onHuntEnd += ResetFlags;
+    }
+
+    private void OnDisable()
+    {
+        GameActions.onHuntStart -= ResetFlags;
+        GameActions.onHuntEnd -= ResetFlags;
+    }
+
+
     public override State Tick(AiManager aiManager)
     {
         //Debug.Log("We are in the wander state");

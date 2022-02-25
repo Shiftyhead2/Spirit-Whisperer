@@ -16,6 +16,7 @@ public class GhostBehaviour : MonoBehaviour
     [SerializeField] float AngerOnFailedResponse;
     [SerializeField] float AngerOnSucessfullResponse;
     [SerializeField] GhostPatience currentPatience;
+    bool isInPlayerRange = false;
 
     bool isPresent = false;
     bool fullNameRevealed = false;
@@ -29,11 +30,13 @@ public class GhostBehaviour : MonoBehaviour
     void OnEnable()
     {
         GameActions.onAwaitResponse += Respond;
+        GameActions.onInsideRadiusOfGhost += CheckIfIsInPlayerRange;
     }
 
     void OnDisable()
     {
         GameActions.onAwaitResponse -= Respond;
+        GameActions.onInsideRadiusOfGhost -= CheckIfIsInPlayerRange;
     }
 
 
@@ -74,6 +77,14 @@ public class GhostBehaviour : MonoBehaviour
 
     void Respond(int whichReveal)
     {
+
+        if (GameManager.isHuntActivated || !isInPlayerRange)
+        {
+            return;
+        }
+
+
+
         if(whichReveal != QuestionsManager.currentOrder)
         {
             Debug.Log("That question was not in order");
@@ -243,5 +254,11 @@ public class GhostBehaviour : MonoBehaviour
         }
 
         InformationPanelUI.instance.SetUpPresenceToggle(isPresent);
+    }
+
+
+    void CheckIfIsInPlayerRange(bool inRange)
+    {
+        isInPlayerRange = inRange;
     }
 }
