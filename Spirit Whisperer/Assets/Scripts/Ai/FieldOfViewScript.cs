@@ -15,15 +15,12 @@ public class FieldOfViewScript : MonoBehaviour
     LayerMask IgnoreForLineOfSight;
 
     [Header("Detection radius")]
-    [SerializeField]
-    float detectionRadius = 5f;
+    public float detectionRadius = 5f;
 
 
     [Header("Detection angle radius")]
-    [SerializeField]
-    float minimumDetectionRadiusAngle = -35f;
-    [SerializeField]
-    float maximumDetectionRadiusAngle = 35f;
+    [Range(0f,360f)]
+    public float angle;
 
     AiManager aiManager;
 
@@ -43,14 +40,15 @@ public class FieldOfViewScript : MonoBehaviour
 
             if (colliders[i].transform.TryGetComponent(out FPSController player))
             {
-                Vector3 targetDetection = transform.position - player.transform.position;
-                float viewableAngle = Vector3.Angle(targetDetection, transform.forward);
+                Vector3 targetDetection = (player.transform.position - transform.position).normalized;
+                
 
-                if (viewableAngle > minimumDetectionRadiusAngle && viewableAngle < maximumDetectionRadiusAngle)
+                if (Vector3.Angle(transform.forward,targetDetection) < angle / 2)
                 {
                     RaycastHit hit;
                     Vector3 playerStartPoint = new Vector3(player.transform.position.x, characterEyeLevel, player.transform.position.z);
                     Vector3 AIStartPoint = new Vector3(transform.position.x, characterEyeLevel, transform.position.z);
+
 
                     Debug.DrawLine(playerStartPoint, AIStartPoint, Color.red);
 
@@ -66,12 +64,5 @@ public class FieldOfViewScript : MonoBehaviour
                 }
             }
         }
-    }
-
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, detectionRadius);
     }
 }

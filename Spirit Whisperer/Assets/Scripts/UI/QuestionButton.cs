@@ -24,6 +24,7 @@ public class QuestionButton : MonoBehaviour
         GameActions.onShowButtons += ToggleShown;
         GameActions.onHuntStart += OnHuntStart;
         GameActions.onHuntEnd += OnHuntEnd;
+        GameActions.onJumpScare += OnJumpScare;
     }
 
     private void OnDisable()
@@ -33,6 +34,7 @@ public class QuestionButton : MonoBehaviour
         GameActions.onShowButtons -= ToggleShown;
         GameActions.onHuntStart -= OnHuntStart;
         GameActions.onHuntEnd -= OnHuntEnd;
+        GameActions.onJumpScare += OnJumpScare;
     }
 
     public void PressButton(int which)
@@ -56,6 +58,12 @@ public class QuestionButton : MonoBehaviour
     private void OnHuntEnd()
     {
         ToggleButton(true);
+    }
+
+
+    void OnJumpScare()
+    {
+        ToggleButton(false);
     }
 
 

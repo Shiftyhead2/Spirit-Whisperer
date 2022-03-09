@@ -21,12 +21,14 @@ public class SpiritBoxRadiusChecker : MonoBehaviour
     {
         GameActions.onHuntStart += OnHuntStart;
         GameActions.onHuntEnd += OnHuntEnd;
+        GameActions.onJumpScare += onJumpScare;
     }
 
     void OnDisable()
     {
         GameActions.onHuntStart -= OnHuntStart;
         GameActions.onHuntEnd -= OnHuntEnd;
+        GameActions.onJumpScare -= onJumpScare;
     }
 
 
@@ -49,6 +51,12 @@ public class SpiritBoxRadiusChecker : MonoBehaviour
     void OnHuntEnd()
     {
         InvokeMethod();
+    }
+
+
+    void onJumpScare()
+    {
+        CancelInvoke();
     }
 
 
