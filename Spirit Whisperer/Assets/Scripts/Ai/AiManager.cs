@@ -23,7 +23,7 @@ public class AiManager : MonoBehaviour
     public float minimumAttackDistance = 2f;
     public float minimumWanderStoppingDistance = 0.2f;
 
-    bool isHunting = false;
+    public bool isHunting = false;
 
     Collider AiCollider;
     SkinnedMeshRenderer meshRenderer;
@@ -55,6 +55,13 @@ public class AiManager : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.isJumpscared)
+        {
+            return;
+        }
+
+
+
         if (isHunting)
         {
             animator.SetFloat("vertical", AINavMeshAgent.velocity.magnitude);
@@ -68,6 +75,13 @@ public class AiManager : MonoBehaviour
 
     private void FixedUpdate()
     {
+
+        if (GameManager.isJumpscared)
+        {
+            return;
+        }
+
+
         if (isHunting)
         {
             HandleStateMachine();

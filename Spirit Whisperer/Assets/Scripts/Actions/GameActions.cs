@@ -15,4 +15,5 @@ public class GameActions
     public static Action onShowButtons;
     public static Action onHuntStart;
     public static Action onHuntEnd;
+    public static Action onJumpScare;
 }

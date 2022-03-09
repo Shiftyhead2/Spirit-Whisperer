@@ -67,12 +67,16 @@ public class FPSController : MonoBehaviour
         inputActions.Player.ToggleFlashlight.performed += ctx => ToggleFlashlight();
         inputActions.Player.Crouch.performed += ctx => HandleCrouch();
 
+        GameActions.onJumpScare += onJumpScare;
+
 
         inputActions.Enable();
     }
 
     private void OnDisable()
     {
+        GameActions.onJumpScare -= onJumpScare;
+
         inputActions.Disable();
     }
 
@@ -82,6 +86,11 @@ public class FPSController : MonoBehaviour
         CalculateView();
     }
 
+
+    void onJumpScare()
+    {
+        inputActions.Disable();
+    }
 
     void CalculateView()
     {

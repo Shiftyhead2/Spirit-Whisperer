@@ -78,7 +78,7 @@ public class GhostBehaviour : MonoBehaviour
     void Respond(int whichReveal)
     {
 
-        if (GameManager.isHuntActivated || !isInPlayerRange)
+        if (GameManager.isHuntActivated || !isInPlayerRange || GameManager.isJumpscared)
         {
             return;
         }

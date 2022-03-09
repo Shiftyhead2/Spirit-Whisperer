@@ -8,17 +8,75 @@ public class GameManager : MonoBehaviour
     [SerializeField] float huntPercentIncrease = 0.1f;
     [SerializeField] float HuntDuration = 60f;
     [SerializeField] float timeTick = 2f;
+    float timeToStartTicking = 1f;
     float currentHuntPercent = 0f;
     float currentHuntDuration = 0f;
 
+    [SerializeField]
+    Camera playerCamera;
+    [SerializeField]
+    Camera jumpScareCamera;
+    [SerializeField]
+    GameObject jumpScarePlane;
+
+    AudioListener playerAudioListener;
+    AudioListener jumpScareAudioListener;
+
+
 
     public static bool isHuntActivated = false;
+    public static bool isJumpscared = false;
+
+
+    private void OnEnable()
+    {
+        GameActions.onJumpScare += OnJumpScare;
+    }
+
+
+    private void OnDisable()
+    {
+        GameActions.onJumpScare -= OnJumpScare;
+    }
 
 
     private void Awake()
     {
+
+        playerCamera = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<Camera>();
+        jumpScareCamera = GameObject.FindGameObjectWithTag("AI").GetComponentInChildren<Camera>();
+        jumpScarePlane = GameObject.FindGameObjectWithTag("Jumpscare");
+
+
+        if(playerCamera != null)
+        {
+            playerCamera.enabled = true;
+            playerAudioListener = playerCamera.transform.GetComponent<AudioListener>();
+            playerAudioListener.enabled = true;
+        }
+        else
+        {
+            Debug.LogError("Unable to find player camera");
+        }
+
+        if(jumpScareCamera != null)
+        {
+            jumpScareCamera.enabled = false;
+            jumpScareAudioListener = jumpScareCamera.transform.GetComponent<AudioListener>();
+            jumpScareAudioListener.enabled = false;
+        }
+        else
+        {
+            Debug.LogError("Unable to find jumpscare camera");
+        }
+
+        jumpScarePlane.SetActive(false);
+
+
+
         currentHuntPercent = 0f;
         isHuntActivated = false;
+        isJumpscared = false;
         currentHuntDuration = HuntDuration;
         StartHuntTickDown();
     }
@@ -26,21 +84,29 @@ public class GameManager : MonoBehaviour
 
     void StartHuntTickDown()
     {
-        InvokeRepeating(nameof(IncreaseHuntPercentange), 0f, timeTick);
+        InvokeRepeating(nameof(IncreaseHuntPercentange), timeToStartTicking, timeTick);
     }
 
 
 
     private void Update()
     {
-        if (isHuntActivated)
+
+        if (!isJumpscared)
         {
-            currentHuntDuration -= Time.deltaTime;
-            if(currentHuntDuration <= 0f)
+            if (isHuntActivated)
             {
-                Debug.Log("Ending the hunt");
-                EndHunt();
+                currentHuntDuration -= Time.deltaTime;
+                if (currentHuntDuration <= 0f)
+                {
+                    Debug.Log("Ending the hunt");
+                    EndHunt();
+                }
             }
+        }
+        else
+        {
+            return;
         }
     }
 
@@ -71,7 +137,20 @@ public class GameManager : MonoBehaviour
     {
         GameActions.onHuntEnd?.Invoke();
         isHuntActivated = false;
+        currentHuntPercent = 0f;
         StartHuntTickDown();
+    }
+
+
+    void OnJumpScare()
+    {
+        isJumpscared = true;
+        playerAudioListener.enabled = false;
+        playerCamera.enabled = false;
+        jumpScareAudioListener.enabled = true;
+        jumpScareCamera.enabled = true;
+        jumpScarePlane.SetActive(true);
+        CancelInvoke();
     }
 
 }
