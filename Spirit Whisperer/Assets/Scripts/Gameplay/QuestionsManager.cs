@@ -29,6 +29,7 @@ public class QuestionsManager : MonoBehaviour
     int whichButtonIsRandom;
     bool previousQuestionNotInOrder;
     bool ResponseWasASuccess;
+    int previousOrder;
 
     void OnEnable()
     {
@@ -59,6 +60,7 @@ public class QuestionsManager : MonoBehaviour
     void Start()
     {
         currentOrder = 0;
+        previousOrder = currentOrder;
         WaitingForAResponse = false;
         previousQuestionNotInOrder = false;
         StartGame();
@@ -102,7 +104,7 @@ public class QuestionsManager : MonoBehaviour
         startQuestions.Clear();
     }
 
-    void GetTwoQuestions()
+    void GetTwoQuestions(bool canceledResponse)
     {
         if(allQuestions.Count == 0)
         {
@@ -111,11 +113,22 @@ public class QuestionsManager : MonoBehaviour
             return;
         }
 
-        if (!previousQuestionNotInOrder && ResponseWasASuccess)
+        if (!canceledResponse)
         {
-            currentOrder++;
-            Debug.Log("current order: " + currentOrder);
+            if (!previousQuestionNotInOrder && ResponseWasASuccess)
+            {
+                currentOrder++;
+                
+            }
         }
+        else
+        {
+            if(currentOrder != previousOrder)
+            {
+                currentOrder = previousOrder;
+            }
+        }
+        Debug.Log("current order: " + currentOrder);
         inOrderQuestions.Clear();
         PopulatePossibleQuestionsPool();
         Questions newQuestion;
@@ -192,6 +205,7 @@ public class QuestionsManager : MonoBehaviour
             starterResponse = currentQuestions[which].starterResponses[Random.Range(0, currentQuestions[which].starterResponses.Count)];
         }
         whichReveal = currentQuestions[which].Reveals;
+        previousOrder = currentOrder;
         AddCurrentQuestions();
         //Debug.Log("Waiting for a response");
         yield return new WaitForSeconds(Random.Range(minWaitingTimeForAResponse, maxWaitingTimeForAResponse));
@@ -238,7 +252,7 @@ public class QuestionsManager : MonoBehaviour
                 allQuestions.Remove(_q);
             }
         }
-        GetTwoQuestions();
+        GetTwoQuestions(false);
     }
 
 
@@ -274,7 +288,7 @@ public class QuestionsManager : MonoBehaviour
         UImanager._instance.HideOrEnableButtons(false);
         UImanager._instance.SetUpResponseText("");
         GameActions.onDisableToggleButton?.Invoke(true);
-        GetTwoQuestions();
+        GetTwoQuestions(false);
         WaitingForAResponse = false;
     }
 
@@ -395,7 +409,7 @@ public class QuestionsManager : MonoBehaviour
             UImanager._instance.HideOrEnableButtons(false);
             UImanager._instance.SetUpResponseText("");
             GameActions.onDisableToggleButton?.Invoke(true);
-            GetTwoQuestions();
+            GetTwoQuestions(true);
         }
         else if(ghostInRange && WaitingForAResponse)
         {
@@ -419,7 +433,8 @@ public class QuestionsManager : MonoBehaviour
         UImanager._instance.HideOrEnableButtons(false);
         UImanager._instance.SetUpResponseText("");
         GameActions.onDisableToggleButton?.Invoke(true);
-        GetTwoQuestions();
+        GetTwoQuestions(true);
+        
     }
     
 }

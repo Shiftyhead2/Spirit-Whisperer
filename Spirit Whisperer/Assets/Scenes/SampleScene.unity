@@ -1269,7 +1269,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   huntPercentIncrease: 0.1
   HuntDuration: 60
-  timeTick: 2
+  timeTick: 5
   playerCamera: {fileID: 0}
   jumpScareCamera: {fileID: 0}
   jumpScarePlane: {fileID: 0}
@@ -8209,11 +8209,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 978ae2edaa409d743be968779472c619, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 12
-  ghostLayerMask:
-    serializedVersion: 2
-    m_Bits: 128
-  repeatInterval: 0.2
+  detectionDistanceMax: 20
+  repeatInterval: 0.1
 --- !u!33 &1695905144
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -8230,7 +8227,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1695905141}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.128, z: -0.55}
+  m_LocalPosition: {x: 0, y: 1.23, z: -0.55}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 734334990}
@@ -8277,6 +8274,10 @@ MonoBehaviour:
     ViewYSensitivity: 20
     ViewXInverted: 0
     ViewYInverted: 0
+    sprintHold: 1
+    MovementSmoothing: 0.2
+    RunningForwardSpeed: 6
+    RunningStrafeSpeed: 3
     WalkingForwardSpeed: 4
     WalkingStrafeSpeed: 2
   viewClampYMin: -70

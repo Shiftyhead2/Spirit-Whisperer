@@ -31,12 +31,14 @@ public class GhostBehaviour : MonoBehaviour
     {
         GameActions.onAwaitResponse += Respond;
         GameActions.onInsideRadiusOfGhost += CheckIfIsInPlayerRange;
+        GameActions.onHuntStart += OnHuntStart;
     }
 
     void OnDisable()
     {
         GameActions.onAwaitResponse -= Respond;
         GameActions.onInsideRadiusOfGhost -= CheckIfIsInPlayerRange;
+        GameActions.onHuntStart -= OnHuntStart;
     }
 
 
@@ -45,6 +47,14 @@ public class GhostBehaviour : MonoBehaviour
         currentPatience = GhostPatience.NONE;
         SetUpPatience();
         SetUpInformationPanelUI();
+    }
+
+    void OnHuntStart()
+    {
+        if (isInPlayerRange)
+        {
+            isInPlayerRange = false;
+        }
     }
 
     void SetUpPatience()

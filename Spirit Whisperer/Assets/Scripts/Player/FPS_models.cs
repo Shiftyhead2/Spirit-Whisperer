@@ -16,7 +16,19 @@ public static class FPS_models
 
         public bool ViewXInverted;
         public bool ViewYInverted;
+
+
         [Header("Movement Settings")]
+        public bool sprintHold;
+        public float MovementSmoothing;
+
+
+
+        [Header("Movement Running Settings")]
+        public float RunningForwardSpeed;
+        public float RunningStrafeSpeed;
+
+        [Header("Movement Walking Settings")]
         public float WalkingForwardSpeed;
         public float WalkingStrafeSpeed;
     }
