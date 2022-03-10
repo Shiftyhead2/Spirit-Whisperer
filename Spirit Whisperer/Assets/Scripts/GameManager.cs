@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Unable to find player camera");
+            Debug.LogError($"Unable to find a player camera. It's either not tagged properly or it doesn't exist!");
         }
 
         if(jumpScareCamera != null)
@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Unable to find jumpscare camera");
+            Debug.LogError($"Unable to find jumpscare camera. It's either not tagged properly or it doesn't exist!");
         }
 
         jumpScarePlane.SetActive(false);

@@ -81,6 +81,22 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""ToggleSprint"",
+                    ""type"": ""Button"",
+                    ""id"": ""75c7d9d4-fa8e-4bc0-bb0f-9bfbf2ac7a69"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""SprintReleased"",
+                    ""type"": ""Button"",
+                    ""id"": ""c6b67f47-50f6-4a8a-bad3-32242aaa85c2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
                 }
             ],
             ""bindings"": [
@@ -215,6 +231,28 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""Crouch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fde7429a-8075-4321-abaa-f56a748d7218"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleSprint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""714035a3-54a0-46ac-9413-ed9841ebaaaa"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SprintReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -231,6 +269,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Player_AskQuestion2 = m_Player.FindAction("AskQuestion2", throwIfNotFound: true);
         m_Player_ToggleFlashlight = m_Player.FindAction("ToggleFlashlight", throwIfNotFound: true);
         m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
+        m_Player_ToggleSprint = m_Player.FindAction("ToggleSprint", throwIfNotFound: true);
+        m_Player_SprintReleased = m_Player.FindAction("SprintReleased", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -288,6 +328,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_AskQuestion2;
     private readonly InputAction m_Player_ToggleFlashlight;
     private readonly InputAction m_Player_Crouch;
+    private readonly InputAction m_Player_ToggleSprint;
+    private readonly InputAction m_Player_SprintReleased;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -300,6 +342,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @AskQuestion2 => m_Wrapper.m_Player_AskQuestion2;
         public InputAction @ToggleFlashlight => m_Wrapper.m_Player_ToggleFlashlight;
         public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
+        public InputAction @ToggleSprint => m_Wrapper.m_Player_ToggleSprint;
+        public InputAction @SprintReleased => m_Wrapper.m_Player_SprintReleased;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -333,6 +377,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Crouch.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
                 @Crouch.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
                 @Crouch.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
+                @ToggleSprint.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleSprint;
+                @ToggleSprint.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleSprint;
+                @ToggleSprint.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleSprint;
+                @SprintReleased.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprintReleased;
+                @SprintReleased.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprintReleased;
+                @SprintReleased.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprintReleased;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -361,6 +411,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Crouch.started += instance.OnCrouch;
                 @Crouch.performed += instance.OnCrouch;
                 @Crouch.canceled += instance.OnCrouch;
+                @ToggleSprint.started += instance.OnToggleSprint;
+                @ToggleSprint.performed += instance.OnToggleSprint;
+                @ToggleSprint.canceled += instance.OnToggleSprint;
+                @SprintReleased.started += instance.OnSprintReleased;
+                @SprintReleased.performed += instance.OnSprintReleased;
+                @SprintReleased.canceled += instance.OnSprintReleased;
             }
         }
     }
@@ -375,5 +431,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnAskQuestion2(InputAction.CallbackContext context);
         void OnToggleFlashlight(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
+        void OnToggleSprint(InputAction.CallbackContext context);
+        void OnSprintReleased(InputAction.CallbackContext context);
     }
 }

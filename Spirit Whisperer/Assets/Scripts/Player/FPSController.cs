@@ -42,6 +42,11 @@ public class FPSController : MonoBehaviour
     [SerializeField] Vector3 standingCenter = new Vector3(0, 0, 0);
     private bool isCrouching;
     private bool duringCrouchAnimation;
+    private bool isSprinting;
+
+
+    private Vector3 newMovementSpeed;
+    private Vector3 newMovementVelocity;
 
 
     private void Awake()
@@ -66,6 +71,8 @@ public class FPSController : MonoBehaviour
         inputActions.Player.AskQuestion2.performed += ctx => GameActions.onQuestionAsked?.Invoke(1);
         inputActions.Player.ToggleFlashlight.performed += ctx => ToggleFlashlight();
         inputActions.Player.Crouch.performed += ctx => HandleCrouch();
+        inputActions.Player.ToggleSprint.performed += ctx => ToggleSprint();
+        inputActions.Player.SprintReleased.performed += ctx => StopSprint();
 
         GameActions.onJumpScare += onJumpScare;
 
@@ -108,11 +115,28 @@ public class FPSController : MonoBehaviour
 
     void CalculateMovement()
     {
-        var verticalSpeed = playerSettings.WalkingForwardSpeed * input_Movement.y * Time.deltaTime;
-        var horizontalSpeed = playerSettings.WalkingStrafeSpeed * input_Movement.x * Time.deltaTime;
 
-        var newMovementSpeed = new Vector3(horizontalSpeed, 0, verticalSpeed);
-        newMovementSpeed = transform.TransformDirection(newMovementSpeed);
+        if(input_Movement.y <= 0.2f)
+        {
+            isSprinting = false;
+        }
+
+
+
+        var verticalSpeed = playerSettings.WalkingForwardSpeed;
+        var horizontalSpeed = playerSettings.WalkingStrafeSpeed;
+
+
+        if (isSprinting)
+        {
+            verticalSpeed = playerSettings.RunningForwardSpeed;
+            horizontalSpeed = playerSettings.RunningStrafeSpeed;
+        }
+
+
+
+        newMovementSpeed = Vector3.SmoothDamp(newMovementSpeed, new Vector3(horizontalSpeed * input_Movement.x * Time.deltaTime, 0, verticalSpeed * input_Movement.y * Time.deltaTime),ref newMovementVelocity,playerSettings.MovementSmoothing);
+        var movementSpeed = transform.TransformDirection(newMovementSpeed);
 
         if (playerGravity > gravityMin)
         {
@@ -125,9 +149,9 @@ public class FPSController : MonoBehaviour
             playerGravity = -0.1f;
         }
 
-        newMovementSpeed.y += playerGravity;
+        movementSpeed.y += playerGravity;
 
-        characterController.Move(newMovementSpeed);
+        characterController.Move(movementSpeed);
     }
 
     void ToggleFlashlight()
@@ -166,5 +190,30 @@ public class FPSController : MonoBehaviour
         isCrouching = !isCrouching;
 
         duringCrouchAnimation = false;
+    }
+
+
+    private void ToggleSprint()
+    {
+
+        if (input_Movement.y <= 0.2f)
+        {
+            isSprinting = false;
+            return;
+        }
+
+
+
+        isSprinting = !isSprinting;
+    }
+
+
+    private void StopSprint()
+    {
+
+        if (playerSettings.sprintHold)
+        {
+            isSprinting = false;
+        }
     }
 }

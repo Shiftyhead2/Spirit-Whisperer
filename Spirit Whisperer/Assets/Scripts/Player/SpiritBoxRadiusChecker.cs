@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class SpiritBoxRadiusChecker : MonoBehaviour
 {
-    [SerializeField] private float radius;
-    [SerializeField] private LayerMask ghostLayerMask;
+    public float detectionDistanceMax;
     [SerializeField] private float repeatInterval;
-    bool ghostInRange = false;
+    public bool ghostInRange { get; private set; } = false;
+
+    public GameObject ghost { get; private set; }
+    private float currentDistance;
 
 
     private void Start()
     {
+        ghost = GameObject.FindGameObjectWithTag("AI");
         ghostInRange = false;
         InvokeMethod();
     }
@@ -34,13 +37,26 @@ public class SpiritBoxRadiusChecker : MonoBehaviour
 
     void InvokeMethod()
     {
-        InvokeRepeating(nameof(IsGhostInRadius), 0f, repeatInterval);
+        StartCoroutine(CheckRadius());
+    }
+
+
+
+    private IEnumerator CheckRadius()
+    {
+        WaitForSeconds wait = new WaitForSeconds(repeatInterval);
+
+        while (true)
+        {
+            yield return wait;
+            IsGhostInRange();
+        }
     }
 
 
     void OnHuntStart()
     {
-        CancelInvoke();
+        StopAllCoroutines();
         if (ghostInRange)
         {
             ghostInRange = false;
@@ -56,58 +72,30 @@ public class SpiritBoxRadiusChecker : MonoBehaviour
 
     void onJumpScare()
     {
-        CancelInvoke();
+        StopAllCoroutines();
     }
 
 
 
-    private void IsGhostInRadius()
+    private void IsGhostInRange()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, radius, ghostLayerMask);
+        currentDistance = Vector3.Distance(transform.position, ghost.transform.position);
 
-        if(colliders.Length <= 0)
+        if(currentDistance <= detectionDistanceMax)
         {
-            GameActions.onInsideRadiusOfGhost?.Invoke(false);
-
+            if (!ghostInRange)
+            {
+                ghostInRange = true;
+                GameActions.onInsideRadiusOfGhost?.Invoke(true);
+            }
+        }
+        else
+        {
             if (ghostInRange)
             {
                 ghostInRange = false;
             }
-
-            return;
-        }
-
-        for (int i = 0; i < colliders.Length; i++)
-        {
-            if(colliders[i].TryGetComponent(out AiManager ghost))
-            {
-                if (!ghostInRange)
-                {
-                    ghostInRange = true;
-                    GameActions.onInsideRadiusOfGhost?.Invoke(true);
-                }
-                else
-                {
-                    return;
-                }
-            }
+            GameActions.onInsideRadiusOfGhost?.Invoke(false);
         }
     }
-
-
-    private void OnDrawGizmos()
-    {
-        if (!ghostInRange)
-        {
-            Gizmos.color = Color.red;
-        }
-        else
-        {
-            Gizmos.color = Color.green;
-        }
-
-
-        Gizmos.DrawWireSphere(transform.position, radius);
-    }
-
 }
