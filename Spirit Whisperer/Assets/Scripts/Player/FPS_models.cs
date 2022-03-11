@@ -31,6 +31,11 @@ public static class FPS_models
         [Header("Movement Walking Settings")]
         public float WalkingForwardSpeed;
         public float WalkingStrafeSpeed;
+
+        [Header("Speed Effectors")]
+        public float SpeedEffector = 1f;
+        public float CrouchSpeedEffector;
+        public float FallingSpeedEffector;
     }
     #endregion
 }

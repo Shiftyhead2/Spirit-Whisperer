@@ -5352,6 +5352,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1068343118}
   m_CullTransparentMesh: 1
+--- !u!1 &1142928299 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5678789968010177305, guid: 4105a03f3bf9c3047baf15631fc2d14d, type: 3}
+  m_PrefabInstance: {fileID: 5678789967537203126}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1142928300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1142928299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1602b88bcb7e1a44aba11745b389d5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boundBox:
+    m_Center: {x: 0, y: 0.59, z: 0}
+    m_Extent: {x: 69.38, y: 0.5, z: 22.3}
 --- !u!1 &1189163364
 GameObject:
   m_ObjectHideFlags: 0
@@ -8276,10 +8296,13 @@ MonoBehaviour:
     ViewYInverted: 0
     sprintHold: 1
     MovementSmoothing: 0.2
-    RunningForwardSpeed: 6
-    RunningStrafeSpeed: 3
-    WalkingForwardSpeed: 4
-    WalkingStrafeSpeed: 2
+    RunningForwardSpeed: 4
+    RunningStrafeSpeed: 2.5
+    WalkingForwardSpeed: 2
+    WalkingStrafeSpeed: 1.5
+    SpeedEffector: 1
+    CrouchSpeedEffector: 0.6
+    FallingSpeedEffector: 0.4
   viewClampYMin: -70
   viewClampYMax: 80
   gravityAmount: 0.12

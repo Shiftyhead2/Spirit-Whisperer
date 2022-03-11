@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpiritBoxRadiusChecker : MonoBehaviour
 {
-    public float detectionDistanceMax;
+    [SerializeField] public float detectionDistanceMax;
     [SerializeField] private float repeatInterval;
     public bool ghostInRange { get; private set; } = false;
 
