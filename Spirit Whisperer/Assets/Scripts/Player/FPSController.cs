@@ -7,6 +7,7 @@ public class FPSController : MonoBehaviour
 {
 
     private bool ShouldCrouch => canCrouch && !duringCrouchAnimation && characterController.isGrounded;
+    private bool ShouldSprint => !isCrouching && !duringCrouchAnimation && characterController.isGrounded;
 
     private CharacterController characterController;
     private PlayerControls inputActions;
@@ -116,7 +117,7 @@ public class FPSController : MonoBehaviour
     void CalculateMovement()
     {
 
-        if(input_Movement.y <= 0.2f)
+        if(input_Movement.y <= 0.2f || !ShouldSprint)
         {
             isSprinting = false;
         }
@@ -132,6 +133,25 @@ public class FPSController : MonoBehaviour
             verticalSpeed = playerSettings.RunningForwardSpeed;
             horizontalSpeed = playerSettings.RunningStrafeSpeed;
         }
+
+
+        if (!characterController.isGrounded)
+        {
+            playerSettings.SpeedEffector = playerSettings.FallingSpeedEffector;
+        }
+        else if (isCrouching)
+        {
+            playerSettings.SpeedEffector = playerSettings.CrouchSpeedEffector;
+        }
+        else
+        {
+            playerSettings.SpeedEffector = 1f;
+        }
+
+
+        //Effectors
+        verticalSpeed *= playerSettings.SpeedEffector;
+        horizontalSpeed *= playerSettings.SpeedEffector;
 
 
 
@@ -195,6 +215,15 @@ public class FPSController : MonoBehaviour
 
     private void ToggleSprint()
     {
+
+        if (!ShouldSprint)
+        {
+            isSprinting = false;
+            return;
+        }
+
+
+
 
         if (input_Movement.y <= 0.2f)
         {

@@ -9,13 +9,9 @@ public class WanderState : State
     FieldOfViewScript FOV;
     IdleState idleState;
     PursuitState pursuitState;
+    WanderBounds wanderBounds;
 
     bool hasTarget = false;
-
-    [Header("Wander Settings")]
-    public Bounds boundBox;
-
-    private Vector3 targetPos;
 
     float targetDistance;
 
@@ -25,6 +21,7 @@ public class WanderState : State
         pursuitState = GetComponent<PursuitState>();
         FOV = GetComponentInParent<FieldOfViewScript>();
         idleState = GetComponent<IdleState>();
+        wanderBounds = GetComponentInParent<WanderBounds>();
     }
 
 
@@ -59,7 +56,7 @@ public class WanderState : State
             }
             else
             {
-                targetDistance = Vector3.Distance(targetPos, aiManager.transform.position);
+                targetDistance = Vector3.Distance(wanderBounds.targetPos, aiManager.transform.position);
 
                 if(targetDistance <= aiManager.minimumWanderStoppingDistance)
                 {
@@ -84,26 +81,10 @@ public class WanderState : State
 
     void FindNewTargetPosition(AiManager aiManager)
     {
-        targetPos = GetRandomPoint(aiManager);
+        wanderBounds.SetTargetPos(aiManager);
         aiManager.AINavMeshAgent.isStopped = false;
         hasTarget = true;
-        aiManager.AINavMeshAgent.SetDestination(targetPos);
-    }
-
-    Vector3 GetRandomPoint(AiManager aiManager)
-    {
-        float randomX = Random.Range(-boundBox.extents.x + aiManager.AINavMeshAgent.radius, boundBox.extents.x - aiManager.AINavMeshAgent.radius);
-        float randomZ = Random.Range(-boundBox.extents.z + aiManager.AINavMeshAgent.radius, boundBox.extents.z - aiManager.AINavMeshAgent.radius);
-        return new Vector3(randomX, aiManager.transform.position.y, randomZ);
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(boundBox.center, boundBox.size);
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(targetPos, 0.2f);
-    }
-
+        aiManager.AINavMeshAgent.SetDestination(wanderBounds.targetPos);
+    } 
 }
 
