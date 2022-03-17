@@ -5,14 +5,17 @@ using static FPS_models;
 
 public class FPSController : MonoBehaviour
 {
-
+    #region -LambaBools-
     private bool ShouldCrouch => canCrouch && !duringCrouchAnimation && characterController.isGrounded;
     private bool ShouldSprint => !isCrouching && !duringCrouchAnimation && characterController.isGrounded;
+    #endregion
 
+
+    #region -Variables-
     private CharacterController characterController;
     private PlayerControls inputActions;
-    [SerializeField] Vector2 input_Movement;
-    [SerializeField] Vector2 input_View;
+    Vector2 input_Movement;
+    Vector2 input_View;
 
     private Vector3 newCameraRotation;
     private Vector3 newCharacterRotation;
@@ -29,6 +32,19 @@ public class FPSController : MonoBehaviour
     [Header("View Clamp Settings")]
     [SerializeField] float viewClampYMin = -70f;
     [SerializeField] float viewClampYMax = 80f;
+
+
+    [Header("Leaning")]
+    public Transform LeanPivot;
+    private float currentLean;
+    private float targetLean;
+    public float leanAngle;
+    public float leanSmoothing;
+    private float leanVelocity;
+
+
+    private bool isLeaningLeft = false;
+    private bool isLeaningRight = false;
 
     [Header("Gravity")]
     [SerializeField] float gravityAmount;
@@ -48,8 +64,9 @@ public class FPSController : MonoBehaviour
 
     private Vector3 newMovementSpeed;
     private Vector3 newMovementVelocity;
+    #endregion
 
-
+    #region -Awake-
     private void Awake()
     {
         inputActions = new PlayerControls();
@@ -61,7 +78,9 @@ public class FPSController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
+    #endregion
 
+    #region -OnEnable/OnDisable-
     private void OnEnable()
     {
         inputActions.Player.Movement.performed += ctx => input_Movement = ctx.ReadValue<Vector2>();
@@ -75,6 +94,13 @@ public class FPSController : MonoBehaviour
         inputActions.Player.ToggleSprint.performed += ctx => ToggleSprint();
         inputActions.Player.SprintReleased.performed += ctx => StopSprint();
 
+        inputActions.Player.LeanLeftPressed.performed += ctx => isLeaningLeft = true;
+        inputActions.Player.LeanLeftPressed.canceled += ctx => isLeaningLeft = false;
+
+
+        inputActions.Player.LeanRightPressed.performed += ctx => isLeaningRight = true;
+        inputActions.Player.LeanRightPressed.canceled += ctx => isLeaningRight = false;
+
         GameActions.onJumpScare += onJumpScare;
 
 
@@ -87,19 +113,25 @@ public class FPSController : MonoBehaviour
 
         inputActions.Disable();
     }
+    #endregion
 
+    #region -Update-
     private void Update()
     {
         CalculateMovement();
         CalculateView();
+        CalculateLeaning();
     }
+    #endregion
 
-
+    #region -JumpScareStuff-
     void onJumpScare()
     {
         inputActions.Disable();
     }
+    #endregion
 
+    #region -ViewCalculation/MovementCalculation-
     void CalculateView()
     {
         newCharacterRotation.y += playerSettings.ViewXSensitivity * (playerSettings.ViewXInverted ? -input_View.x : input_View.x) * Time.deltaTime;
@@ -173,12 +205,44 @@ public class FPSController : MonoBehaviour
 
         characterController.Move(movementSpeed);
     }
+    #endregion
 
+    #region -Leaning-
+
+    private void CalculateLeaning()
+    {
+
+        if (isLeaningLeft)
+        {
+            targetLean = leanAngle;
+        }
+        else if (isLeaningRight)
+        {
+            targetLean = -leanAngle;
+        }
+        else
+        {
+            targetLean = 0;
+        }
+
+
+
+        currentLean = Mathf.SmoothDamp(currentLean, targetLean, ref leanVelocity, leanSmoothing);
+
+
+        LeanPivot.localRotation = Quaternion.Euler(new Vector3(0, 0, currentLean));
+    }
+
+    #endregion
+
+    #region -Flashlight-
     void ToggleFlashlight()
     {
         flashLight.enabled = !flashLight.enabled;
     }
+    #endregion
 
+    #region -Crouching-
     void HandleCrouch()
     {
         if(ShouldCrouch)
@@ -211,8 +275,9 @@ public class FPSController : MonoBehaviour
 
         duringCrouchAnimation = false;
     }
+    #endregion
 
-
+    #region -Sprinting-
     private void ToggleSprint()
     {
 
@@ -245,4 +310,5 @@ public class FPSController : MonoBehaviour
             isSprinting = false;
         }
     }
+    #endregion
 }
