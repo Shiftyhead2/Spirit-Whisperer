@@ -84,6 +84,22 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press"
+                },
+                {
+                    "name": "LeanLeftPressed",
+                    "type": "Button",
+                    "id": "57a712c5-bb92-4a42-a38a-74bc88f07b2e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold(duration=0.1)"
+                },
+                {
+                    "name": "LeanRightPressed",
+                    "type": "Button",
+                    "id": "f9c37f32-8985-4386-a74b-07c936792f42",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold(duration=0.1)"
                 }
             ],
             "bindings": [
@@ -156,7 +172,7 @@
                 {
                     "name": "",
                     "id": "5667278e-d893-4fe5-9e62-6c2822275477",
-                    "path": "<Keyboard>/q",
+                    "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -200,7 +216,7 @@
                 {
                     "name": "",
                     "id": "a775efb4-af37-4ef5-a037-20e4877eca5d",
-                    "path": "<Keyboard>/f",
+                    "path": "<Keyboard>/t",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -223,7 +239,7 @@
                     "name": "",
                     "id": "fde7429a-8075-4321-abaa-f56a748d7218",
                     "path": "<Keyboard>/shift",
-                    "interactions": "",
+                    "interactions": "Press",
                     "processors": "",
                     "groups": "",
                     "action": "ToggleSprint",
@@ -238,6 +254,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "SprintReleased",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "97cbe3e1-1dd0-4b8e-8e41-f657e17edd16",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeanLeftPressed",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8c81c028-680d-4dd1-9814-6d23d7e12396",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeanRightPressed",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
