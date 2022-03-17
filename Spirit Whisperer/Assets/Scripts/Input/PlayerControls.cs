@@ -97,6 +97,22 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""LeanLeftPressed"",
+                    ""type"": ""Button"",
+                    ""id"": ""57a712c5-bb92-4a42-a38a-74bc88f07b2e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(duration=0.1)""
+                },
+                {
+                    ""name"": ""LeanRightPressed"",
+                    ""type"": ""Button"",
+                    ""id"": ""f9c37f32-8985-4386-a74b-07c936792f42"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(duration=0.1)""
                 }
             ],
             ""bindings"": [
@@ -169,7 +185,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""5667278e-d893-4fe5-9e62-6c2822275477"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Keyboard>/r"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -213,7 +229,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""a775efb4-af37-4ef5-a037-20e4877eca5d"",
-                    ""path"": ""<Keyboard>/f"",
+                    ""path"": ""<Keyboard>/t"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -236,7 +252,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""name"": """",
                     ""id"": ""fde7429a-8075-4321-abaa-f56a748d7218"",
                     ""path"": ""<Keyboard>/shift"",
-                    ""interactions"": """",
+                    ""interactions"": ""Press"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ToggleSprint"",
@@ -251,6 +267,28 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""SprintReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""97cbe3e1-1dd0-4b8e-8e41-f657e17edd16"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeanLeftPressed"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8c81c028-680d-4dd1-9814-6d23d7e12396"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeanRightPressed"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -271,6 +309,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
         m_Player_ToggleSprint = m_Player.FindAction("ToggleSprint", throwIfNotFound: true);
         m_Player_SprintReleased = m_Player.FindAction("SprintReleased", throwIfNotFound: true);
+        m_Player_LeanLeftPressed = m_Player.FindAction("LeanLeftPressed", throwIfNotFound: true);
+        m_Player_LeanRightPressed = m_Player.FindAction("LeanRightPressed", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -330,6 +370,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Crouch;
     private readonly InputAction m_Player_ToggleSprint;
     private readonly InputAction m_Player_SprintReleased;
+    private readonly InputAction m_Player_LeanLeftPressed;
+    private readonly InputAction m_Player_LeanRightPressed;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -344,6 +386,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
         public InputAction @ToggleSprint => m_Wrapper.m_Player_ToggleSprint;
         public InputAction @SprintReleased => m_Wrapper.m_Player_SprintReleased;
+        public InputAction @LeanLeftPressed => m_Wrapper.m_Player_LeanLeftPressed;
+        public InputAction @LeanRightPressed => m_Wrapper.m_Player_LeanRightPressed;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -383,6 +427,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @SprintReleased.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprintReleased;
                 @SprintReleased.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprintReleased;
                 @SprintReleased.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprintReleased;
+                @LeanLeftPressed.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLeanLeftPressed;
+                @LeanLeftPressed.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLeanLeftPressed;
+                @LeanLeftPressed.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLeanLeftPressed;
+                @LeanRightPressed.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLeanRightPressed;
+                @LeanRightPressed.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLeanRightPressed;
+                @LeanRightPressed.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLeanRightPressed;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -417,6 +467,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @SprintReleased.started += instance.OnSprintReleased;
                 @SprintReleased.performed += instance.OnSprintReleased;
                 @SprintReleased.canceled += instance.OnSprintReleased;
+                @LeanLeftPressed.started += instance.OnLeanLeftPressed;
+                @LeanLeftPressed.performed += instance.OnLeanLeftPressed;
+                @LeanLeftPressed.canceled += instance.OnLeanLeftPressed;
+                @LeanRightPressed.started += instance.OnLeanRightPressed;
+                @LeanRightPressed.performed += instance.OnLeanRightPressed;
+                @LeanRightPressed.canceled += instance.OnLeanRightPressed;
             }
         }
     }
@@ -433,5 +489,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnCrouch(InputAction.CallbackContext context);
         void OnToggleSprint(InputAction.CallbackContext context);
         void OnSprintReleased(InputAction.CallbackContext context);
+        void OnLeanLeftPressed(InputAction.CallbackContext context);
+        void OnLeanRightPressed(InputAction.CallbackContext context);
     }
 }

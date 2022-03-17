@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     Camera playerCamera;
     [SerializeField]
-    Camera jumpScareCamera;
+    GameObject jumpScareCamera;
     [SerializeField]
     GameObject jumpScarePlane;
 
@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
     {
 
         playerCamera = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<Camera>();
-        jumpScareCamera = GameObject.FindGameObjectWithTag("AI").GetComponentInChildren<Camera>();
+        jumpScareCamera = GameObject.Find("JumpscareCamera");
         jumpScarePlane = GameObject.FindGameObjectWithTag("Jumpscare");
 
 
@@ -61,8 +61,8 @@ public class GameManager : MonoBehaviour
 
         if(jumpScareCamera != null)
         {
-            jumpScareCamera.enabled = false;
-            jumpScareAudioListener = jumpScareCamera.transform.GetComponent<AudioListener>();
+            jumpScareCamera.SetActive(false);
+            jumpScareAudioListener = jumpScareCamera.GetComponent<AudioListener>();
             jumpScareAudioListener.enabled = false;
         }
         else
@@ -148,7 +148,7 @@ public class GameManager : MonoBehaviour
         playerAudioListener.enabled = false;
         playerCamera.enabled = false;
         jumpScareAudioListener.enabled = true;
-        jumpScareCamera.enabled = true;
+        jumpScareCamera.SetActive(true);
         jumpScarePlane.SetActive(true);
         CancelInvoke();
     }
