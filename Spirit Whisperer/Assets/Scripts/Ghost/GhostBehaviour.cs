@@ -85,7 +85,7 @@ public class GhostBehaviour : MonoBehaviour
     }
 
 
-    void Respond(int whichReveal)
+    void Respond(int whichReveal,float failureModifier,float angerModifier)
     {
 
         if (GameManager.isHuntActivated || !isInPlayerRange || GameManager.isJumpscared)
@@ -110,23 +110,23 @@ public class GhostBehaviour : MonoBehaviour
 
 
         
-        if (isResponseSuccessfull())
+        if (isResponseSuccessfull(failureModifier))
         {
             RevealInformation(whichReveal);
             GameActions.onResponseSucceded?.Invoke();
-            GetAngrier(AngerOnSucessfullResponse);
+            GetAngrier(AngerOnSucessfullResponse,angerModifier,true);
         }
         else 
         {
-            GetAngrier(AngerOnFailedResponse);
+            GetAngrier(AngerOnFailedResponse,angerModifier,false);
             GameActions.onResponseFailed?.Invoke();
         }
     }
 
 
-    void GetAngrier(float chance)
+    void GetAngrier(float chance,float modifier,bool useModifier)
     {
-        if (CanGetAngry(chance))
+        if (CanGetAngry(chance,modifier,useModifier))
         {
             Debug.Log("The ghost is angrier");
             switch (currentPatience)
@@ -150,26 +150,43 @@ public class GhostBehaviour : MonoBehaviour
     }
 
 
-    private bool CanGetAngry(float failureChance)
+    private bool CanGetAngry(float failureChance,float modifier, bool useModifier)
     {
-        if(currentPatience == GhostPatience.NONE)
+        float modifiedFailureChance;
+
+        if (currentPatience == GhostPatience.NONE)
         {
             return true;
         }
+
         float currentChance = Random.Range(0f, 1f);
+
+        if (useModifier)
+        {
+            modifiedFailureChance = Mathf.Clamp(failureChance + modifier, 0f, 1f);
+        }
+        else 
+        {
+            modifiedFailureChance = failureChance;
+        }
+
+        Debug.Log($"Modified anger chance is {modifiedFailureChance}");
+        
         //Debug.Log(currentChance);
-        if(currentChance <= failureChance && currentPatience != GhostPatience.ANGRY && isPresent)
+        if(currentChance <= modifiedFailureChance && currentPatience != GhostPatience.ANGRY && isPresent)
         {
             return true;
         }
         return false;
     }
 
-    private bool isResponseSuccessfull()
+    private bool isResponseSuccessfull(float modifier)
     {
+        float modifiedFailureChance = Mathf.Clamp(failureChance + modifier, 0f, 1f);
+        Debug.Log($"Modified failure chance is {modifiedFailureChance}");
         float currentChance = Random.Range(0f, 1f);
         //Debug.Log(currentChange);
-        if(currentChance >= failureChance)
+        if(currentChance >= modifiedFailureChance)
         {
             return true;
         }

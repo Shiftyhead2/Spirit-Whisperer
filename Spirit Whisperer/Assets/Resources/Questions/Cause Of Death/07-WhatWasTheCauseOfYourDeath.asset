@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: 07-WhatWasTheCauseOfYourDeath
   m_EditorClassIdentifier: 
   QuestionText: What was the cause of your death?
+  FailureChanceModifier: 0.15
+  AngerChanceModifier: 0.4
   Reveals: 6
   responses: []
   starterResponses: []

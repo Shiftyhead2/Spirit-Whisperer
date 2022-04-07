@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: 07-HowWereYouKilled
   m_EditorClassIdentifier: 
   QuestionText: How were you killed?
+  FailureChanceModifier: 0.15
+  AngerChanceModifier: 0.4
   Reveals: 6
   responses: []
   starterResponses: []
