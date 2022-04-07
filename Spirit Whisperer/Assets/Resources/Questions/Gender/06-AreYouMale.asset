@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: 06-AreYouMale
   m_EditorClassIdentifier: 
   QuestionText: Are you male?
+  FailureChanceModifier: 0.05
+  AngerChanceModifier: 0.2
   Reveals: 3
   responses:
   - {fileID: 11400000, guid: 99cae99e7d154f044baea6eacae57d81, type: 2}

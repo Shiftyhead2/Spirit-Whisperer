@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: 03-HowOldAreYou
   m_EditorClassIdentifier: 
   QuestionText: How old are you?
+  FailureChanceModifier: 0.1
+  AngerChanceModifier: 0.15
   Reveals: 2
   responses:
   - {fileID: 11400000, guid: a29c18abf0d37c64db3101890e80d482, type: 2}

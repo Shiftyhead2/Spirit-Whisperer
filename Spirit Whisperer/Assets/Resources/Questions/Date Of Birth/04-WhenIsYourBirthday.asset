@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: 04-WhenIsYourBirthday
   m_EditorClassIdentifier: 
   QuestionText: When is your birthday?
+  FailureChanceModifier: 0.1
+  AngerChanceModifier: 0.3
   Reveals: 4
   responses:
   - {fileID: 11400000, guid: 75690809aedb15040b47c89d6f048865, type: 2}
