@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: 05-WhenHaveYouLeftTheLandOfTheLiving
   m_EditorClassIdentifier: 
   QuestionText: When have you left the land of the living?
+  FailureChanceModifier: 0.15
+  AngerChanceModifier: 0.35
   Reveals: 5
   responses:
   - {fileID: 11400000, guid: 75969866af3088a4184a27781c64a7e4, type: 2}

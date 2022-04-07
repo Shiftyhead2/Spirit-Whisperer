@@ -15,17 +15,19 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     Camera playerCamera;
     [SerializeField]
-    GameObject jumpScareCamera;
+    GameObject jumpScareCameraGameObject;
     [SerializeField]
     GameObject jumpScarePlane;
+
+    Camera jumpScareCamera;
 
     AudioListener playerAudioListener;
     AudioListener jumpScareAudioListener;
 
 
 
-    public static bool isHuntActivated = false;
-    public static bool isJumpscared = false;
+    public static bool isHuntActivated { get; private set; } = false;
+    public static bool isJumpscared { get; private set; } = false;
 
 
     private void OnEnable()
@@ -44,7 +46,7 @@ public class GameManager : MonoBehaviour
     {
 
         playerCamera = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<Camera>();
-        jumpScareCamera = GameObject.Find("JumpscareCamera");
+        jumpScareCameraGameObject = GameObject.Find("JumpscareCamera");
         jumpScarePlane = GameObject.FindGameObjectWithTag("Jumpscare");
 
 
@@ -59,10 +61,12 @@ public class GameManager : MonoBehaviour
             Debug.LogError($"Unable to find a player camera. It's either not tagged properly or it doesn't exist!");
         }
 
-        if(jumpScareCamera != null)
+        if(jumpScareCameraGameObject != null)
         {
-            jumpScareCamera.SetActive(false);
-            jumpScareAudioListener = jumpScareCamera.GetComponent<AudioListener>();
+            jumpScareCamera = jumpScareCameraGameObject.GetComponent<Camera>();
+            jumpScareCamera.enabled = false;
+            jumpScareCameraGameObject.SetActive(false);
+            jumpScareAudioListener = jumpScareCameraGameObject.GetComponent<AudioListener>();
             jumpScareAudioListener.enabled = false;
         }
         else
@@ -148,8 +152,9 @@ public class GameManager : MonoBehaviour
         playerAudioListener.enabled = false;
         playerCamera.enabled = false;
         jumpScareAudioListener.enabled = true;
-        jumpScareCamera.SetActive(true);
+        jumpScareCameraGameObject.SetActive(true);
         jumpScarePlane.SetActive(true);
+        jumpScareCamera.enabled = true;
         CancelInvoke();
     }
 

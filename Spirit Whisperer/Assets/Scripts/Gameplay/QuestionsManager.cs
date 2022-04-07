@@ -194,6 +194,10 @@ public class QuestionsManager : MonoBehaviour
     {
         UImanager._instance.HideOrEnableButtons(true);
         GameActions.onDisableToggleButton?.Invoke(false);
+        float modifier = currentQuestions[which].FailureChanceModifier;
+        float angerModifier = currentQuestions[which].AngerChanceModifier;
+        Debug.Log($"Current failure modifier is {modifier}");
+        Debug.Log($"Current anger chance modifier is {angerModifier}");
         //Caching the current response because the entire line of code is too long 
         if (currentQuestions[which].responses.Count > 0)
         {
@@ -209,7 +213,7 @@ public class QuestionsManager : MonoBehaviour
         AddCurrentQuestions();
         //Debug.Log("Waiting for a response");
         yield return new WaitForSeconds(Random.Range(minWaitingTimeForAResponse, maxWaitingTimeForAResponse));
-        GameActions.onAwaitResponse?.Invoke(whichReveal);
+        GameActions.onAwaitResponse?.Invoke(whichReveal,modifier,angerModifier);
         
     }
 

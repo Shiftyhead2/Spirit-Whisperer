@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: 06-AreYouABoy
   m_EditorClassIdentifier: 
   QuestionText: Are you a boy?
+  FailureChanceModifier: 0.05
+  AngerChanceModifier: 0.2
   Reveals: 3
   responses:
   - {fileID: 11400000, guid: 42a4fc715ad1c784694f8328fad59bec, type: 2}
